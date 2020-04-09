@@ -1,4 +1,3 @@
 
-animals -- https://github.com/hzlzh/Domain-Name-List/blob/master/Animal-words.txt
 hypernyms -- https://www.kaggle.com/duketemon/hypernyms-wordnet
 jobs -- https://github.com/johnlsheridan/occupations/blob/master/occupations.csv
