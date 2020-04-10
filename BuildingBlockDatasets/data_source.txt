@@ -1,3 +1,4 @@
 
 hypernyms -- https://www.kaggle.com/duketemon/hypernyms-wordnet
 jobs -- https://github.com/johnlsheridan/occupations/blob/master/occupations.csv
+names -- https://github.com/dominictarr/random-name/blob/master/first-names.txt
