@@ -8,7 +8,7 @@ cars,wheels,hubcaps
 coats,zippers
 stores,employees,bones
 computer,processor,silicon
-drumsets,snares,heads
+drums,snares,heads
 songs,bands,muscisians,instruments
 homes,families,children
 artworks,paints,chemicals
@@ -21,4 +21,6 @@ teapot,tea
 pond,water,molecules
 pens,ink
 zoos,animals
-domains,kingdoms,phylums,classes,orders,families,genuses,species
+domains,kingdoms,phylums,classes,orders,families,genera,species
+deck,cards,suits
+hotels,rooms,beds,customers
