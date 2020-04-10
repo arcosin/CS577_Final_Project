@@ -4,7 +4,7 @@ from string import Template
 from timeit import default_timer as timer
 
 class BuildDataset():
-    def __init__(self, tree_infile, inc_outfile, cor_outfile):
+    def __init__(self, tree_infile, cor_outfile, inc_outfile, type):
         random.seed(13011)
         self.DEFAULT_DIRNAME = "./BuildingBlockDatasets/"
         self.ROOT_KEY = ("ROOT",)
@@ -15,12 +15,20 @@ class BuildDataset():
         self.extraDatasets["jobs"] = self.getListDS(self.dirname + "jobs.txt")
         self.extraDatasets["movement"] = self.getListDS(self.dirname + "movement_verbs.txt")
         self.extraDatasets["activity"] = self.getListDS(self.dirname + "activities.txt")
-        self.tree = self.buildTree(self.dirname + tree_infile)
-        self.goodPairs = self.buildCorrectPairs(self.tree)
-        self.badPairs = self.buildIncorrectPairs(self.tree, self.goodPairs)
-        self.ent, self.nonEnt = self.buildRecords(self.goodPairs, self.extraDatasets)
-        self.writeDataset("GeneratedDatasets/composition_entailment.txt", self.ent)
-        self.writeDataset("GeneratedDatasets/composition_nonentailment.txt", self.nonEnt)
+        self.extraDatasets["names"] = self.getListDS(self.dirname + "names.txt")
+        self.extraDatasets["locations"] = self.getListDS(self.dirname + "locations.txt")
+        self.extraDatasets["tempModifiers"] = self.getListDS(self.dirname + "temporal.txt")
+
+        if(type == 'temporal'):
+            self.ent, self.nonEnt = self.buildRecords(self.extraDatasets)
+        else:
+            self.tree = self.buildTree(self.dirname + tree_infile)
+            self.goodPairs = self.buildCorrectPairs(self.tree)
+            self.badPairs = self.buildIncorrectPairs(self.tree, self.goodPairs)
+            self.ent, self.nonEnt = self.buildRecords(self.goodPairs, self.extraDatasets)
+            
+        self.writeDataset(cor_outfile, self.ent)
+        self.writeDataset(inc_outfile, self.nonEnt)
 
     def getArgs(self):
         if len(sys.argv) > 1:
@@ -77,6 +85,7 @@ class BuildDataset():
             pairs += self.buildCorrectPairsRec(tree, root, [root])
         return pairs
 
+
     def buildIncorrectPairs(self, tree, goodPairs):
         badPairs = []
         for node1 in tree.keys():
@@ -106,7 +115,7 @@ class BuildDataset():
 
             correctRecords.append((pCor, hCor, True))
             incorrectRecords.append((pInc, hInc, False))
-      
+
         # template 2
         premise = Template("Some $J0 said $A1 consists of $A2.")
         hypothesis = Template("The $J0 said $A1 are composed of $A2")
@@ -164,7 +173,3 @@ class BuildDataset():
             dsFile.write(str(rec))
             dsFile.write("\n")
         dsFile.close()
-
-
-
-

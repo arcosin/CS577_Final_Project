@@ -1,0 +1,22 @@
+
+correct -   premise: [job] [went to/visited] [location] [temporal modifier]
+            hypothesis: [job] [went to/visited] [location]
+
+incorrect - premise: [job] [went to/visited] [location]
+            hypothesis: [job] [went to/visited] [location] [temporal modifier]
+
+
+
+correct -   premise: [name] worked as [job] for [temporal modifier]
+            hypothesis: [name] worked as [job]
+
+incorrect - premise: [name] worked as [job]
+            hypothesis: [name] worked as [job] for [temporal modifier]
+
+
+
+correct -   premise: [name] lived in [location] for [temporal modifier]
+            hypothesis: [name] lived in [location]
+
+incorrect - premise: [name] lived in [location]
+            hypothesis: [name] lived in [location] for [temporal modifier]

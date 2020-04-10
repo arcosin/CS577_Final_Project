@@ -5,8 +5,8 @@ from string import Template
 from timeit import default_timer as timer
 
 class BuildCompositionDataset(BuildDataset.BuildDataset):
-    def __init__(self, tree_infile, inc_outfile, cor_outfile):
-        super().__init__(tree_infile, inc_outfile, cor_outfile)
+    def __init__(self, tree_infile, cor_outfile, inc_outfile, type):
+        super().__init__(tree_infile, cor_outfile, inc_outfile, type)
 
     def buildRecords(self, correctPairs, extraDatasets):
         correctRecords = []
@@ -26,7 +26,7 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
 
             correctRecords.append((pCor, hCor, True))
             incorrectRecords.append((pInc, hInc, False))
-      
+
         # template 2
         premise = Template("Some $J0 said $A1 consists of $A2.")
         hypothesis = Template("The $J0 said $A1 are composed of $A2")
@@ -79,4 +79,4 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
         return (correctRecords, incorrectRecords)
 
 
-p1 = BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt")
+p1 = BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt", "Composition")
