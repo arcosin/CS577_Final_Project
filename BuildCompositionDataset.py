@@ -79,4 +79,4 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
         return (correctRecords, incorrectRecords)
 
 
-p1 = BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt")
+BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt")
