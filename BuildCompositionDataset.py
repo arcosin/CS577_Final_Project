@@ -133,6 +133,23 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
 
         return (correctRecords, incorrectRecords)
 
+        # template 8
+        premise = Template("Some $J0 came across some $A1 in some $A2.")
+        hypothesis = Template("Some $J0 came across some $A1 in some $A2.")
+        for job in extraDatasets["jobs"]:
+            for i, pair in enumerate(correctPairs):
+                w2, w1 = pair
+
+                pCor = premise.substitute(J0 = job, A1 = w1, A2=w2)
+                hCor = hypothesis.substitute(J0 = job, A1 = w1, A2=w2)
+
+                pInc = premise.substitute(J0 = job, A1 = w1, A2=w2)
+                hInc = hypothesis.substitute(J0 = job, A1 = w2, A2=w1)
+
+                correctRecords.append((pCor, hCor, True))
+                incorrectRecords.append((pInc, hInc, False))
+
+        return (correctRecords, incorrectRecords)
 
 
 BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt","compositions")
