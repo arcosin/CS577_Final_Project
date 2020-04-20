@@ -76,7 +76,7 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
                 correctRecords.append((pCor, hCor, True))
                 incorrectRecords.append((pInc, hInc, False))
 
-        return (correctRecords, incorrectRecords)
+        #return (correctRecords, incorrectRecords)
 
         # template 5
         premise = Template("Some $J0 said wherever you find $A1 you'll find $A2.")
@@ -94,7 +94,7 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
                 correctRecords.append((pCor, hCor, True))
                 incorrectRecords.append((pInc, hInc, False))
 
-        return (correctRecords, incorrectRecords)
+        #return (correctRecords, incorrectRecords)
 
 
         # template 6
@@ -113,7 +113,7 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
                 correctRecords.append((pCor, hCor, True))
                 incorrectRecords.append((pInc, hInc, False))
 
-        return (correctRecords, incorrectRecords)
+        #return (correctRecords, incorrectRecords)
 
         # template 7
         premise = Template("Some $J0 found some $A1.")
@@ -131,7 +131,7 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
                 correctRecords.append((pCor, hCor, True))
                 incorrectRecords.append((pInc, hInc, False))
 
-        return (correctRecords, incorrectRecords)
+        #return (correctRecords, incorrectRecords)
 
         # template 8
         premise = Template("Some $J0 came across some $A1 in some $A2.")
@@ -149,7 +149,25 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
                 correctRecords.append((pCor, hCor, True))
                 incorrectRecords.append((pInc, hInc, False))
 
+        #return (correctRecords, incorrectRecords)
+
+        # template 9
+        premise = Template("$A1 are not found in $A2.")
+        hypothesis = Template("$A2 do not contain $A1.")
+        for i, pair in enumerate(correctPairs):
+            w2, w1 = pair
+
+            pCor = premise.substitute(A1 = w1, A2=w2)
+            hCor = hypothesis.substitute(A1 = w1, A2=w2)
+
+            pInc = premise.substitute(A1 = w1, A2=w2)
+            hInc = hypothesis.substitute(A1 = w2, A2=w1)
+
+            correctRecords.append((pCor, hCor, True))
+            incorrectRecords.append((pInc, hInc, False))
+
         return (correctRecords, incorrectRecords)
+        
 
 
 BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt","compositions")
