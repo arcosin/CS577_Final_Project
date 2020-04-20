@@ -14,7 +14,7 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
 
         # template 1
         premise = Template("$A1 are found in $A2.")
-        hypothesis = Template("$A2 contain $A1")
+        hypothesis = Template("$A2 contain $A1.")
         for i, pair in enumerate(correctPairs):
             w2, w1 = pair
 
@@ -29,7 +29,7 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
 
         # template 2
         premise = Template("Some $J0 said $A1 consists of $A2.")
-        hypothesis = Template("The $J0 said $A1 are composed of $A2")
+        hypothesis = Template("The $J0 said $A1 are composed of $A2.")
         for job in extraDatasets["jobs"]:
             for i, pair in enumerate(correctPairs):
                 w2, w1 = pair
@@ -46,7 +46,7 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
 
         # template 3
         premise = Template("Some $A0 found $A1 in $A2.")
-        hypothesis = Template("$A1 were found in $A2 by the $A0")
+        hypothesis = Template("$A1 were found in $A2 by the $A0.")
         for animal in extraDatasets["animals"]:
             for i, pair in enumerate(correctPairs):
                 w2, w1 = pair
@@ -62,21 +62,77 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
 
         # template 4
         premise = Template("Some $J0 said $A1 are made of $A2.")
-        hypothesis = Template("The $J0 said $A2 are used to make $A1")
+        hypothesis = Template("The $J0 said $A2 are used to make $A1.")
         for job in extraDatasets["jobs"]:
             for i, pair in enumerate(correctPairs):
                 w2, w1 = pair
 
-            pCor = premise.substitute(J0 = job, A1 = w2, A2=w1)
-            hCor = hypothesis.substitute(J0 = job, A1 = w2, A2=w1)
+                pCor = premise.substitute(J0 = job, A1 = w2, A2=w1)
+                hCor = hypothesis.substitute(J0 = job, A1 = w2, A2=w1)
 
-            pInc = premise.substitute(J0 = job, A1 = w2, A2=w1)
-            hInc = hypothesis.substitute(J0 = job, A1 = w1, A2=w2)
+                pInc = premise.substitute(J0 = job, A1 = w2, A2=w1)
+                hInc = hypothesis.substitute(J0 = job, A1 = w1, A2=w2)
 
-            correctRecords.append((pCor, hCor, True))
-            incorrectRecords.append((pInc, hInc, False))
+                correctRecords.append((pCor, hCor, True))
+                incorrectRecords.append((pInc, hInc, False))
+
+        return (correctRecords, incorrectRecords)
+
+        # template 5
+        premise = Template("Some $J0 said wherever you find $A1 you'll find $A2.")
+        hypothesis = Template("If you find $A1 you'll find $A2.")
+        for job in extraDatasets["jobs"]:
+            for i, pair in enumerate(correctPairs):
+                w2, w1 = pair
+
+                pCor = premise.substitute(J0 = job, A1 = w2, A2=w1)
+                hCor = hypothesis.substitute(J0 = job, A1 = w2, A2=w1)
+
+                pInc = premise.substitute(J0 = job, A1 = w2, A2=w1)
+                hInc = hypothesis.substitute(J0 = job, A1 = w1, A2=w2)
+
+                correctRecords.append((pCor, hCor, True))
+                incorrectRecords.append((pInc, hInc, False))
 
         return (correctRecords, incorrectRecords)
 
 
-BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt")
+        # template 6
+        premise = Template("Some $J0 came across some $A1.")
+        hypothesis = Template("Some $J0 came across some $A1.")
+        for job in extraDatasets["jobs"]:
+            for i, pair in enumerate(correctPairs):
+                w2, w1 = pair
+
+                pCor = premise.substitute(J0 = job, A1 = w2)
+                hCor = hypothesis.substitute(J0 = job, A1 = w1)
+
+                pInc = premise.substitute(J0 = job, A1 = w1)
+                hInc = hypothesis.substitute(J0 = job, A1 = w2)
+
+                correctRecords.append((pCor, hCor, True))
+                incorrectRecords.append((pInc, hInc, False))
+
+        return (correctRecords, incorrectRecords)
+
+        # template 7
+        premise = Template("Some $J0 found some $A1.")
+        hypothesis = Template("Some $J0 found some $A1.")
+        for job in extraDatasets["jobs"]:
+            for i, pair in enumerate(correctPairs):
+                w2, w1 = pair
+
+                pCor = premise.substitute(J0 = job, A1 = w2)
+                hCor = hypothesis.substitute(J0 = job, A1 = w1)
+
+                pInc = premise.substitute(J0 = job, A1 = w1)
+                hInc = hypothesis.substitute(J0 = job, A1 = w2)
+
+                correctRecords.append((pCor, hCor, True))
+                incorrectRecords.append((pInc, hInc, False))
+
+        return (correctRecords, incorrectRecords)
+
+
+
+BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt","compositions")
