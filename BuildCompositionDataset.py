@@ -153,14 +153,14 @@ class BuildCompositionDataset(BuildDataset.BuildDataset):
 
         # template 9
         premise = Template("$A1 are not found in $A2.")
-        hypothesis = Template("$A2 do not contain $A1.")
+        hypothesis = Template("$A1 do not contain $A2.")
         for i, pair in enumerate(correctPairs):
             w2, w1 = pair
 
-            pCor = premise.substitute(A1 = w1, A2=w2)
+            pCor = premise.substitute(A1 = w2, A2=w1)
             hCor = hypothesis.substitute(A1 = w1, A2=w2)
 
-            pInc = premise.substitute(A1 = w1, A2=w2)
+            pInc = premise.substitute(A1 = w2, A2=w1)
             hInc = hypothesis.substitute(A1 = w2, A2=w1)
 
             correctRecords.append((pCor, hCor, True))
