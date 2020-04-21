@@ -1,4 +1,0 @@
-
-
-premise: the [animal] is in [location 1].
-hypothesis: the [animal] is in [location 2].
