@@ -18,6 +18,7 @@ class BuildDataset():
         self.extraDatasets["names"] = self.getListDS(self.dirname + "names.txt")
         self.extraDatasets["locations"] = self.getListDS(self.dirname + "locations.txt")
         self.extraDatasets["tempModifiers"] = self.getListDS(self.dirname + "temporal.txt")
+        self.extraDatasets["tempFuture"] = self.getListDS(self.dirname + "temporalFuture.txt")
 
         if(type == 'temporal'):
             self.ent, self.nonEnt = self.buildRecords(self.extraDatasets)
@@ -26,7 +27,7 @@ class BuildDataset():
             self.goodPairs = self.buildCorrectPairs(self.tree)
             self.badPairs = self.buildIncorrectPairs(self.tree, self.goodPairs)
             self.ent, self.nonEnt = self.buildRecords(self.goodPairs, self.extraDatasets)
-            
+
         self.writeDataset(cor_outfile, self.ent)
         self.writeDataset(inc_outfile, self.nonEnt)
 

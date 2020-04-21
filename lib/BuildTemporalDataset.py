@@ -56,6 +56,32 @@ class BuildTemporalDataset(BuildDataset.BuildDataset):
             incorrectRecords.append((pInc, hInc, False))
 
 
+        # template 4
+        premise = Template("The $J1 will go to $L1 $T1")
+        hypothesis = Template("The $J1 will go to $L1")
+
+        for temp in extraDatasets["tempFuture"]:
+            job = random.choice(extraDatasets["jobs"])
+            location = random.choice(extraDatasets["locations"])
+
+            pCor = premise.substitute(J1 = job, L1 = location, T1 = temp)
+            hCor = premise.substitute(J1 = job, L1 = location)
+
+            correctRecords.append((pCor, hCor, True))
+
+
+        # template 4
+        premise = Template("The $J1 plans to visit $L1")
+        hypothesis = Template("The $J1 will visit $L1 T1")
+
+        for temp in extraDatasets["tempFuture"]:
+            job = random.choice(extraDatasets["jobs"])
+            location = random.choice(extraDatasets["locations"])
+
+            pInc = premise.substitute(J1 = job, L1 = location)
+            hInc = premise.substitute(J1 = job, L1 = location, T1 = temp)
+
+            incorrectRecords.append((pInc, hInc, False))
+
+
         return (correctRecords, incorrectRecords)
-
-
