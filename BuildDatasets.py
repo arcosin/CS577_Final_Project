@@ -15,4 +15,4 @@ BuildHypernymDataset("hypernyms_tree.csv", "GeneratedDatasets/hypernym_entailmen
 
 BuildHierarchicalTemporalDataset("temporal.csv", "GeneratedDatasets/htemporal_entailment.txt","GeneratedDatasets/htemporal_nonentailment.txt", "compositions")
 
-#BuildBaselineDataset("compositions.csv", "GeneratedDatasets/baseline_entailment.txt","GeneratedDatasets/baseline_nonentailment.txt","compositions")
+BuildBaselineDataset("compositions.csv", "GeneratedDatasets/baseline_entailment.txt","GeneratedDatasets/baseline_nonentailment.txt","compositions")
