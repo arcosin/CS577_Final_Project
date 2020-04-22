@@ -9,16 +9,22 @@ import random
 import pandas as pd
 
 def buildAll():
+    print("Building compositions")
     BuildCompositionDataset("compositions.csv", "GeneratedDatasets/composition_entailment.txt","GeneratedDatasets/composition_nonentailment.txt","compositions")
 
+    print("Building locational")
     BuildLocationalDataset("locations.csv", "GeneratedDatasets/locational_entailment.txt","GeneratedDatasets/locational_nonentailment.txt","compositions")
 
+    print("Building temporal")
     BuildTemporalDataset("compositions.csv", "GeneratedDatasets/temporal_entailment.txt","GeneratedDatasets/temporal_nonentailment.txt", "temporal")
 
+    print("Building hypernym")
     BuildHypernymDataset("hypernyms_tree.csv", "GeneratedDatasets/hypernym_entailment.txt","GeneratedDatasets/hypernym_nonentailment.txt","compositions")
 
+    print("Building htemporal")
     BuildHierarchicalTemporalDataset("temporal.csv", "GeneratedDatasets/htemporal_entailment.txt","GeneratedDatasets/htemporal_nonentailment.txt", "compositions")
 
+    print("Building baseline")
     BuildBaselineDataset("compositions.csv", "GeneratedDatasets/baseline_entailment.txt","GeneratedDatasets/baseline_nonentailment.txt","compositions")
 
 def finalizeData(MAX_EXAMPLES = 100):
@@ -56,7 +62,7 @@ def finalizeData(MAX_EXAMPLES = 100):
                 line = line.split(',')
 
                 # form our new row to append to result
-                new_row = {'hypothesis':line[0], 'premis':line[1], 'label':line[2], 'category':category}
+                new_row = {'hypothesis':line[0], 'premis':line[1], 'label':line[2].strip(), 'category':category}
 
                 # append the new row to result
                 result = result.append(new_row, ignore_index=True)
