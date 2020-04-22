@@ -16,15 +16,15 @@ class BuildHierarchicalTemporalDataset(BuildDataset.BuildDataset):
         premise = Template("The $J1 went to $L1 more than a $T1 ago")
         hypothesis = Template("The $J1 went to $L1 more than a $T2 ago.")
         for i, pair in enumerate(correctPairs):
-            for job in extraDatasets["jobs"]:
-                location = random.choice(extraDatasets["locations"])
-                w2, w1 = pair
+            job = random.choice(extraDatasets["jobs"])
+            location = random.choice(extraDatasets["locations"])
+            w2, w1 = pair
 
-                pCor = premise.substitute(J1= job, L1 = location, T1=w2)
-                hCor = hypothesis.substitute(J1=job, L1 = location, T2=w1)
+            pCor = premise.substitute(J1= job, L1 = location, T1=w2)
+            hCor = hypothesis.substitute(J1=job, L1 = location, T2=w1)
 
-                correctRecords.append((pCor, hCor, True))
-                incorrectRecords.append((hCor, pCor, False))
+            correctRecords.append((pCor, hCor, True))
+            incorrectRecords.append((hCor, pCor, False))
 
         return (correctRecords, incorrectRecords)
 

@@ -27,8 +27,10 @@ def buildAll():
     print("Building baseline")
     BuildBaselineDataset("compositions.csv", "GeneratedDatasets/baseline_entailment.txt","GeneratedDatasets/baseline_nonentailment.txt","compositions")
 
-def finalizeData(MAX_EXAMPLES = 100):
-    result = pd.DataFrame(columns=['hypothesis','premis','label', 'category'])
+def finalizeData(MAX_EXAMPLES = 100, SPLIT_PERC = 10):
+    train_df = pd.DataFrame(columns=['hypothesis','premis','label', 'category'])
+    val_df = pd.DataFrame(columns=['hypothesis','premis','label', 'category'])
+    test_df = pd.DataFrame(columns=['hypothesis','premis','label', 'category'])
 
     # look through each file in generated datasets
     for subdir, dirs, files in os.walk("GeneratedDatasets"):
@@ -65,10 +67,21 @@ def finalizeData(MAX_EXAMPLES = 100):
                 new_row = {'hypothesis':line[0], 'premis':line[1], 'label':line[2].strip(), 'category':category}
 
                 # append the new row to result
-                result = result.append(new_row, ignore_index=True)
+                which_set = random.randint(0,100)
 
-    result.to_csv("GeneratedDatasets/final_data.csv")
+                if which_set < SPLIT_PERC:
+                    test_df = test_df.append(new_row, ignore_index=True)
+                elif which_set >= SPLIT_PERC and which_set < SPLIT_PERC*2:
+                    val_df = val_df.append(new_row, ignore_index=True)
+                else:
+                    train_df = train_df.append(new_row, ignore_index=True)
+
+
+    train_df.to_csv("GeneratedDatasets/train.csv")
+    test_df.to_csv("GeneratedDatasets/test.csv")
+    val_df.to_csv("GeneratedDatasets/validate.csv")
+
 
 
 buildAll()
-finalizeData(100)
+finalizeData(100,10)
