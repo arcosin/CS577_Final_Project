@@ -84,4 +84,4 @@ def finalizeData(MAX_EXAMPLES = 100, SPLIT_PERC = 10):
 
 
 buildAll()
-finalizeData(100,10)
+finalizeData(10000,10)
