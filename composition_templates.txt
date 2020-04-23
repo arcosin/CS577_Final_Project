@@ -1,5 +1,0 @@
-premis: [composition1] are found in [composition2]
-hypothesis: [composition2] contain [composition1]
-
-premis: [composition1] consists of [composition2]
-hypotheis: [composition2] are composed of [composition1]

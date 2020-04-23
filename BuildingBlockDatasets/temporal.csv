@@ -1,0 +1,8 @@
+year,month,week,day,hour,minute,second,millisecond,microsecond
+month,week,day,hour,minute,second,millisecond,microsecond
+week,day,hour,minute,second,millisecond,microsecond
+day,hour,minute,second,millisecond,microsecond
+hour,minute,second,millisecond,microsecond
+minute,second,millisecond,microsecond
+second,millisecond,microsecond
+millisecond,microsecond
