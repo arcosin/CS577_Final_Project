@@ -37,7 +37,7 @@ def getListDS(filename):
 
 
 
-def buildRecords(ds, maxRecordsPerTemplate = 2000):
+def buildRecords(ds, maxRecordsPerTemplate = 3000):
     correctRecords = []
     incorrectRecords = []
     premise = Template("There is a $A in $L.")
@@ -95,7 +95,8 @@ def buildRecords(ds, maxRecordsPerTemplate = 2000):
     hypothesis1 = Template("The $J likes the $A1.")
     hypothesis2 = Template("The $J likes the $A2.")
     hypothesis3 = Template("The $J enjoys the $A2 and the $A1.")
-    recTris = [(j, a1, a2) for j in ds["jobs"] for a1 in ds["animals"] for a2 in ds["animals"]]
+    print("t")
+    recTris = [(j, a1, a2) for j in ds["jobs"][:100] for a1 in ds["animals"] for a2 in ds["animals"]]
     i = 0
     for job, a1, a2 in recTris:
         if a1 != a2:
@@ -111,10 +112,11 @@ def buildRecords(ds, maxRecordsPerTemplate = 2000):
                 break
     premise = Template("$N is a $J with a pet $A and a house in $L.")
     hypothesis1 = Template("The $J has a pet $A.")
-    hypothesis1 = Template("$N has a house in $L.")
+    hypothesis2 = Template("$N has a house in $L.")
     hypothesis3 = Template("The $A is a $J.")
     hypothesis4 = Template("$N has a pet $J.")
-    recQuads = [(n, j, a, l) for n in ds["names"] for j in ds["jobs"] for a in ds["animals"] for l in ds["location"]]
+    print("k")
+    recQuads = [(n, j, a, l) for n in ds["names"] for j in ds["jobs"][:20] for a in ds["animals"][:20] for l in ds["location"]]
     for n, j, a, l in recQuads:
         pCor = premise.substitute(N = n, J = j, A = a, L = l)
         hCor = hypothesis1.substitute(J = j, A = a)
@@ -123,7 +125,7 @@ def buildRecords(ds, maxRecordsPerTemplate = 2000):
         correctRecords.append((pCor, hCor, True))
         hInc = hypothesis3.substitute(J = j, A = a)
         incorrectRecords.append((pCor, hInc, False))
-        hInc = hypothesis3.substitute(N = n, J = j)
+        hInc = hypothesis4.substitute(N = n, J = j)
         incorrectRecords.append((pCor, hInc, False))
         i += 1
         if i > maxRecordsPerTemplate:
