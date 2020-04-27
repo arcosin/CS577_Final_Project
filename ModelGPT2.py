@@ -62,10 +62,12 @@ class TextualEntailmentClassifier:
             outputs = self.model(tokens_tensor)
             predictions = outputs[0]
           
-        return predictions
+        predicted_index = torch.argmax(predictions[0, -1, :]).item()
+        predicted_text = self.tokenizer.decode(indexed_tokens + [predicted_index])
+        return predicted_text
 
     def forward(self, premis, hypothesis):
-        return [self.embed(premis), self.embed(hypothesis)]
+        return self.embed(premis) == hypothesis
 
 
     def train(self, trainDS, epochs = 120):
@@ -75,10 +77,11 @@ class TextualEntailmentClassifier:
             epochLoss = 0.0
             for i, rec in enumerate(trainDS):
                 preds = self.forward(rec["premise"], rec["hypothesis"])
-                loss = ((preds - ys) ** 2).mean()
+                loss = ((preds - rec["entailment"]) ** 2)
                 self.opt.zero_grad()
-                loss.backward()
-                epochLoss += loss.item()
+                #loss.backward()
+                #epochLoss += loss.item()
+                epochLoss += loss
                 self.opt.step()
             losses.append(epochLoss)
         return losses
@@ -93,14 +96,13 @@ class TextualEntailmentClassifier:
 
 
 def main():
-    #trainRecs = readData("./GeneratedDatasets/train.csv")
-    #validRecs = readData("./GeneratedDatasets/validate.csv")
+    trainRecs = readData("./GeneratedDatasets/train.csv")
+    validRecs = readData("./GeneratedDatasets/validate.csv")
     #testRecs = readData("./GeneratedDatasets/test.csv")
 
     tc = TextualEntailmentClassifier()
-    print(tc.forward(["hello", "i", "am", "max"], ["nope", "not", "going", "there"]))
-    print(tc.forward(["hello", "i", "am", "max"], ["hello", "i", "am", "here"]))
-
+    print(tc.train(trainRecs,10))
+    print(tc.run(validRecs))
 
 
 if __name__ == '__main__':
