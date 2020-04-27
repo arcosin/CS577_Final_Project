@@ -3,6 +3,7 @@
 import csv
 from timeit import default_timer as timer
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # Gensim W2V imports.
 from gensim.models import Word2Vec
@@ -28,21 +29,31 @@ WORD_2_VEC_PATH = "D:\\Word2Vec\\w2v.bin"          # Max's computer location.
 
 
 
-def readData(filename):
-    with open(filename) as csvfile:
-        records = []
-        dataReader = csv.reader(csvfile, delimiter = ',', quotechar = '\'')
-        next(dataReader)
-        for row in dataReader:
-            rec = dict()
-            rec["id"] = row[0]
-            rec["premise"] = row[1].split(' ')
-            rec["hypothesis"] = row[2].split(' ')
-            rec["entailment"] = 1 if row[3] == "True" else 0
-            rec["type"] = row[4]
-            records.append(rec)
+def readData(filename, experimental = True):
+    df = pd.read_csv(filename)
+    if experimental:
+        df = df.loc[df['category'] != 'baseline']
+    else:
+        df = df.loc[df['category'] == 'baseline']
+    records = []
+    for index, row in df.iterrows():
+        rec = dict()
+        rec["id"] = row[0]
+        rec["premise"] = row["premis"].strip(" .!?,").split(' ')
+        rec["hypothesis"] = row["hypothesis"].strip(" .!?,").split(' ')
+        rec["entailment"] = 1 if row["label"] == True else 0
+        rec["type"] = row["category"]
+        records.append(rec)
     return records
 
+
+
+def accuracy(preds, ys):
+    correct = 0.0
+    for pred, y in zip(preds, ys):
+        if pred == y:
+            correct += 1.0
+    return correct / float(len(ys))
 
 
 
@@ -60,8 +71,8 @@ class BiLMTextualEntailmentModel(nn.Module):
         embedH = self.embed(hypothesis)
         embedSep = self.buildSepToken()
         embedC = torch.stack(embedP + [embedSep] + embedH).unsqueeze(1)
-        embedLSTM, _ = self.lm(embedC)
-        embedLSTM = embedLSTM.squeeze(1)
+        _, (embedLSTM, _) = self.lm(embedC)
+        embedLSTM = torch.flatten(embedLSTM)
         t = F.relu(self.l1(embedLSTM))
         y = torch.sigmoid(self.l2(t))
         return y
@@ -97,27 +108,39 @@ class TextualEntailmentClassifier:
         self.lr = lr
         self.opt = optim.Adam(self.model.parameters(), lr = lr)
 
-    def train(self, trainDS, epochs = 120):
+    def train(self, trainDS, epochs = 80):
         losses = []
         for e in range(epochs):
-            print("epoch %d." % e)
+            print("   epoch %d." % e)
             epochLoss = 0.0
             for i, rec in enumerate(trainDS):
-                preds = self.model(rec["premise"], rec["hypothesis"])
-                loss = ((preds - ys) ** 2).mean()
+                y = rec["entailment"]
+                pred = self.model(rec["premise"], rec["hypothesis"])
+                loss = ((pred - y) ** 2).mean()
                 self.opt.zero_grad()
                 loss.backward()
                 epochLoss += loss.item()
                 self.opt.step()
             losses.append(epochLoss)
+            print("      Done. Loss = %f." % epochLoss)
         return losses
 
     def run(self, runDS):
         results = []
         for i, rec in enumerate(runDS):
-            pred = self.model(rec["premise"], rec["hypothesis"])
+            pred = round(self.model(rec["premise"], rec["hypothesis"]).item())
             results.append(pred)
         return results
+
+    def test(self, testDS):
+        results = []
+        epochLoss = 0.0
+        for i, rec in enumerate(testDS):
+            y = rec["entailment"]
+            pred = round(self.model(rec["premise"], rec["hypothesis"]).item())
+            results.append(pred)
+            epochLoss += ((pred - y) ** 2)
+        return (results, epochLoss)
 
     def freezeLM(self):
         for param in self.model.lm.parameters():
@@ -135,15 +158,25 @@ class TextualEntailmentClassifier:
 
 
 def main():
-    #trainRecs = readData("./GeneratedDatasets/train.csv")
-    #validRecs = readData("./GeneratedDatasets/validate.csv")
-    #testRecs = readData("./GeneratedDatasets/test.csv")
+    trainRecs = readData("./GeneratedDatasets/train.csv", experimental = False)
+    validRecs = readData("./GeneratedDatasets/validate.csv", experimental = False)
+    #testRecs = readData("./GeneratedDatasets/test.csv", experimental = False)
     model = BiLMTextualEntailmentModel()
-    model.forward(["hello", "i", "am", "max"], ["hello", "i", "am", "here"])
+    tec = TextualEntailmentClassifier(model)
+    print("Training.")
+    tec.train(trainRecs)
+    print("Testing.")
+    res, loss = tec.test(validRecs)
+    validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+    print("   Accuracy = %f." % validAcc)
+
 
 
 
 if __name__ == '__main__':
+    start = timer()
     main()
+    end = timer()
+    print("Done. Runtime = %f." % (end - start))
 
 #===============================================================================
