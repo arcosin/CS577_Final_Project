@@ -83,7 +83,7 @@ class BiLMTextualEntailmentModel(nn.Module):
 
         result = []
         for i,w in enumerate(sentence):
-            predicted_index = torch.argmax(predictions[0, -i, :]).item()
+            predicted_index = torch.argmax(predictions[0, i, :]).item()
             item = torch.FloatTensor([predicted_index])
             result.append(torch.cat((item, oobFlag, sepFlag), 0))
      
@@ -144,11 +144,15 @@ class TextualEntailmentClassifier:
 
 
 def main():
-    #trainRecs = readData("./GeneratedDatasets/train.csv")
-    #validRecs = readData("./GeneratedDatasets/validate.csv")
-    #testRecs = readData("./GeneratedDatasets/test.csv")
+    trainRecs = readData("./GeneratedDatasets/train.csv")
+    validRecs = readData("./GeneratedDatasets/validate.csv")
+    testRecs = readData("./GeneratedDatasets/test.csv")
     model = BiLMTextualEntailmentModel()
-    print(model.forward(["hello", "i", "am", "max"], ["hello", "i", "am", "here"]))
+#    tc = TextualEntailmentClassifier(model)
+#    tc.train(trainRecs)
+#    tc.run(validRecs)
+    #print(model.forward(["hello", "i", "am", "max"], ["hello", "i", "am", "here"]))
+    print(model.forward(["hello", "i", "am", "max"], ["nope", "not", "going", "there"]))
 
 
 
