@@ -30,29 +30,40 @@ WORD_2_VEC_PATH = "D:\\Word2Vec\\w2v.bin"          # Max's computer location.
 
 def readData(filename):
     with open(filename) as csvfile:
+        records = []
         dataReader = csv.reader(csvfile, delimiter = ',', quotechar = '\'')
+        next(dataReader)
         for row in dataReader:
-            print(row)
-            print(len(row))
+            rec = dict()
+            rec["id"] = row[0]
+            rec["premise"] = row[1].split(' ')
+            rec["hypothesis"] = row[2].split(' ')
+            rec["entailment"] = 1 if row[3] == "True" else 0
+            rec["type"] = row[4]
+            records.append(rec)
+    return records
+
 
 
 
 
 class BiLMTextualEntailmentModel(nn.Module):
     def __init__(self, lstmSize = 200, hiddenSize = 300, h1 = 80):
+        super().__init__()
         self.embedder = KeyedVectors.load_word2vec_format(datapath(WORD_2_VEC_PATH), binary = True)
-        self.lm = nn.LSTM(hiddenSize, lstmSize, bidirectional = True)
+        self.lm = nn.LSTM(hiddenSize + 2, lstmSize, bidirectional = True)
         self.l1 = nn.Linear(lstmSize * 2, h1)
         self.l2 = nn.Linear(h1, 1)
 
     def forward(self, premise, hypothesis):
         embedP = self.embed(premise)
         embedH = self.embed(hypothesis)
-        embedSep = buildSepToken()
+        embedSep = self.buildSepToken()
         embedC = torch.stack(embedP + [embedSep] + embedH).unsqueeze(1)
-        embedLSTM, _ = self.lstm(embedC).squeeze(1)
+        embedLSTM, _ = self.lm(embedC)
+        embedLSTM = embedLSTM.squeeze(1)
         t = F.relu(self.l1(embedLSTM))
-        y = F.sigmoid(self.l2(t))
+        y = torch.sigmoid(self.l2(t))
         return y
 
     def embed(self, sentence):
@@ -80,10 +91,55 @@ class BiLMTextualEntailmentModel(nn.Module):
 
 
 
+class TextualEntailmentClassifier:
+    def __init__(self, model, lr = 0.0001):
+        self.model = model
+        self.lr = lr
+        self.opt = optim.Adam(self.model.parameters(), lr = lr)
+
+    def train(self, trainDS, epochs = 120):
+        losses = []
+        for e in range(epochs):
+            print("epoch %d." % e)
+            epochLoss = 0.0
+            for i, rec in enumerate(trainDS):
+                preds = self.model(rec["premise"], rec["hypothesis"])
+                loss = ((preds - ys) ** 2).mean()
+                self.opt.zero_grad()
+                loss.backward()
+                epochLoss += loss.item()
+                self.opt.step()
+            losses.append(epochLoss)
+        return losses
+
+    def run(self, runDS):
+        results = []
+        for i, rec in enumerate(runDS):
+            pred = self.model(rec["premise"], rec["hypothesis"])
+            results.append(pred)
+        return results
+
+    def freezeLM(self):
+        for param in self.model.lm.parameters():
+            param.requires_grad = False
+
+    def unfreezeLM(self):
+        for param in self.model.lm.parameters():
+            param.requires_grad = True
+
+
+
+
+
+
 
 
 def main():
-    readData("./GeneratedDatasets/test.csv")
+    #trainRecs = readData("./GeneratedDatasets/train.csv")
+    #validRecs = readData("./GeneratedDatasets/validate.csv")
+    #testRecs = readData("./GeneratedDatasets/test.csv")
+    model = BiLMTextualEntailmentModel()
+    model.forward(["hello", "i", "am", "max"], ["hello", "i", "am", "here"])
 
 
 
