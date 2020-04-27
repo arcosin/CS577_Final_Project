@@ -84,10 +84,17 @@ class BuildBaselineDataset(BuildDataset.BuildDataset):
                     break
         premise = Template("$N is a $J with a pet $A and a house in $L.")
         hypothesis1 = Template("The $J has a pet $A.")
-        hypothesis1 = Template("$N has a house in $L.")
+        hypothesis2 = Template("$N has a house in $L.")
         hypothesis3 = Template("The $A is a $J.")
         hypothesis4 = Template("$N has a pet $J.")
-        recQuads = [(n, j, a, l) for n in ds["names"] for j in ds["jobs"] for a in ds["animals"] for l in ds["locations"]]
+        recQuads = []
+        for _ in range(maxRecordsPerTemplate):
+            n = random.choice(ds["names"])
+            j = random.choice(ds["jobs"])
+            a = random.choice(ds["animals"])
+            l = random.choice(ds["locations"])
+            recQuads.append((n, j, a, l))
+        i = 0
         for n, j, a, l in recQuads:
             pCor = premise.substitute(N = n, J = j, A = a, L = l)
             hCor = hypothesis1.substitute(J = j, A = a)
@@ -96,11 +103,9 @@ class BuildBaselineDataset(BuildDataset.BuildDataset):
             correctRecords.append((pCor, hCor, True))
             hInc = hypothesis3.substitute(J = j, A = a)
             incorrectRecords.append((pCor, hInc, False))
-            hInc = hypothesis3.substitute(N = n, J = j)
+            hInc = hypothesis4.substitute(N = n, J = j)
             incorrectRecords.append((pCor, hInc, False))
             i += 1
             if i > maxRecordsPerTemplate:
                 break
         return (correctRecords, incorrectRecords)
-
-          

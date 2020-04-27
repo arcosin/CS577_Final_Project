@@ -21,7 +21,7 @@ def buildAll():
     print("Building hypernym")
     BuildHypernymDataset("hypernyms_tree.csv", "GeneratedDatasets/hypernym_entailment.txt","GeneratedDatasets/hypernym_nonentailment.txt","compositions")
 
-    print("Building htemporal")
+    print("Building temporal")
     BuildHierarchicalTemporalDataset("temporal.csv", "GeneratedDatasets/htemporal_entailment.txt","GeneratedDatasets/htemporal_nonentailment.txt", "compositions")
 
     print("Building baseline")
@@ -47,18 +47,22 @@ def finalizeData(MAX_EXAMPLES = 100, SPLIT_PERC = 10):
             # get number of lines in file
             lines = f.readlines()
 
-            # if the number of lines is > MAX_EXAMPLES 
+            # if the number of lines is > MAX_EXAMPLES
             # then randomly choose MAX_EXAMPLE lines to keep in lines_to_append
             while len(lines) > MAX_EXAMPLES:
                 del lines[random.randint(0,len(lines)-1)]
 
-            # category is the first part of the file name 
+            # category is the first part of the file name
             category = file_name.split('_')[0]
 
-            # loop through the lines to include 
+            # loop through the lines to include
             for line in lines:
                 # strip special characters
-                line = line.strip('()\n\'\"')
+                line = line.replace('(', '')
+                line = line.replace(')', '')
+                line = line.replace('\n', '')
+                line = line.replace('\'', '')
+                line = line.replace('\"', '')
 
                 # split hyp/prem/label
                 line = line.split(',')
