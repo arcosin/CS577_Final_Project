@@ -13,8 +13,6 @@ import torch.optim as optim
 
 torch.manual_seed(13011)
 
-
-
 def readData(filename):
     with open(filename) as csvfile:
         records = []
@@ -30,44 +28,30 @@ def readData(filename):
             records.append(rec)
     return records
 
-
-class BiLMTextualEntailmentModel(nn.Module):
-    def __init__(self, lstmSize = 200, hiddenSize = 1, h1 = 80):
-        super().__init__()
-        self.lm = nn.LSTM(hiddenSize + 2, lstmSize, bidirectional = True)
-        self.l1 = nn.Linear(lstmSize * 2, h1)
-        self.l2 = nn.Linear(h1, 1)
-
-    def forward(self, premise, hypothesis):
-        embedP = self.embed(premise)
-        embedH = self.embed(hypothesis)
-        embedSep = self.buildSepToken()
-        embedC = torch.stack(embedP + [embedSep] + embedH).unsqueeze(1)
-        embedLSTM, _ = self.lm(embedC)
-        embedLSTM = embedLSTM.squeeze(1)
-        t = F.relu(self.l1(embedLSTM))
-        y = torch.sigmoid(self.l2(t))
-        return y
-
-    def embed(self, sentence):
+class TextualEntailmentClassifier:
+    def __init__(self, lr = 0.0001):
+        self.lr = lr
 
         # Load pre-trained model tokenizer (vocabulary)
-        tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+        self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
+        # Load pre-trained model (weights)
+        self.model = GPT2LMHeadModel.from_pretrained('gpt2')
+
+        self.opt = optim.Adam(self.model.parameters(), lr = lr)
+
+    def embed(self, sentence):
         # Encode a text inputs
         #text = "Who was Jim Henson ? Jim Henson was a"
         text = sentence
-        indexed_tokens = tokenizer.encode(text)
+        indexed_tokens = self.tokenizer.encode(text)
 
         # Convert indexed tokens in a PyTorch tensor
         tokens_tensor = torch.tensor([indexed_tokens])
 
-        # Load pre-trained model (weights)
-        model = GPT2LMHeadModel.from_pretrained('gpt2')
-
         # Set the model in evaluation mode to deactivate the DropOut modules
         # This is IMPORTANT to have reproducible results during evaluation!
-        model.eval()
+        self.model.eval()
 
         # If you have a GPU, put everything on cuda
         #tokens_tensor = tokens_tensor.to('cuda')
@@ -75,41 +59,14 @@ class BiLMTextualEntailmentModel(nn.Module):
 
         # Predict all tokens
         with torch.no_grad():
-            outputs = model(tokens_tensor)
+            outputs = self.model(tokens_tensor)
             predictions = outputs[0]
           
-        oobFlag = torch.FloatTensor([0])
-        sepFlag = torch.FloatTensor([0])
+        return predictions
 
-        result = []
-        for i,w in enumerate(sentence):
-            predicted_index = torch.argmax(predictions[0, i, :]).item()
-            item = torch.FloatTensor([predicted_index])
-            result.append(torch.cat((item, oobFlag, sepFlag), 0))
-     
-        print(result)
-        print(len(result))
-        return result 
+    def forward(self, premis, hypothesis):
+        return [self.embed(premis), self.embed(hypothesis)]
 
-        # get the predicted next sub-word (in our case, the word 'man')
-        #predicted_index = torch.argmax(predictions[0, -1, :]).item()
-        #predicted_text = tokenizer.decode(indexed_tokens + [predicted_index])
-
-    def buildSepToken(self):
-        wordEmbed = torch.zeros((1,))
-        oobFlag = torch.FloatTensor([0])
-        sepFlag = torch.FloatTensor([1])
-        return torch.cat((wordEmbed, oobFlag, sepFlag), 0)
-
-
-
-
-
-class TextualEntailmentClassifier:
-    def __init__(self, model, lr = 0.0001):
-        self.model = model
-        self.lr = lr
-        self.opt = optim.Adam(self.model.parameters(), lr = lr)
 
     def train(self, trainDS, epochs = 120):
         losses = []
@@ -117,7 +74,7 @@ class TextualEntailmentClassifier:
             print("epoch %d." % e)
             epochLoss = 0.0
             for i, rec in enumerate(trainDS):
-                preds = self.model(rec["premise"], rec["hypothesis"])
+                preds = self.forward(rec["premise"], rec["hypothesis"])
                 loss = ((preds - ys) ** 2).mean()
                 self.opt.zero_grad()
                 loss.backward()
@@ -129,30 +86,20 @@ class TextualEntailmentClassifier:
     def run(self, runDS):
         results = []
         for i, rec in enumerate(runDS):
-            pred = self.model(rec["premise"], rec["hypothesis"])
+            pred = self.forward(rec["premise"], rec["hypothesis"])
             results.append(pred)
         return results
-
-    def freezeLM(self):
-        for param in self.model.lm.parameters():
-            param.requires_grad = False
-
-    def unfreezeLM(self):
-        for param in self.model.lm.parameters():
-            param.requires_grad = True
 
 
 
 def main():
-    trainRecs = readData("./GeneratedDatasets/train.csv")
-    validRecs = readData("./GeneratedDatasets/validate.csv")
-    testRecs = readData("./GeneratedDatasets/test.csv")
-    model = BiLMTextualEntailmentModel()
-#    tc = TextualEntailmentClassifier(model)
-#    tc.train(trainRecs)
-#    tc.run(validRecs)
-    #print(model.forward(["hello", "i", "am", "max"], ["hello", "i", "am", "here"]))
-    print(model.forward(["hello", "i", "am", "max"], ["nope", "not", "going", "there"]))
+    #trainRecs = readData("./GeneratedDatasets/train.csv")
+    #validRecs = readData("./GeneratedDatasets/validate.csv")
+    #testRecs = readData("./GeneratedDatasets/test.csv")
+
+    tc = TextualEntailmentClassifier()
+    print(tc.forward(["hello", "i", "am", "max"], ["nope", "not", "going", "there"]))
+    print(tc.forward(["hello", "i", "am", "max"], ["hello", "i", "am", "here"]))
 
 
 
