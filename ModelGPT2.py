@@ -1,4 +1,5 @@
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
+import pandas as pd
 import csv
 
 # SKLearn metric imports.
@@ -62,37 +63,52 @@ class TextualEntailmentClassifier:
             outputs = self.model(tokens_tensor)
             predictions = outputs[0]
           
-        predicted_index = torch.argmax(predictions[0, -1, :]).item()
-        predicted_text = self.tokenizer.decode(indexed_tokens + [predicted_index])
-        return predicted_text
+        #predicted_index = torch.argmax(predictions[0, -1, :]).item()
+        #predicted_text = self.tokenizer.decode(indexed_tokens + [predicted_index])
+        return predictions
+        #return predicted_text
+
 
     def forward(self, premis, hypothesis):
-        return self.embed(premis) == hypothesis
+        embedA = self.embed(premis)
+        embedB = self.embed(hypothesis)
+
+        embedC = torch.stack(embedA + embedB).unsqueeze(1)
+
+        embedLSTM = nn.LSTM(embedC)
+
+        embedLSTM = torch.flatten(embedLSTM)
+        t = F.relu(nn.Linear(embedLSTM))
+        y = torch.sigmoid(nn.Linear(t))
+        return y
 
 
-    def train(self, trainDS, epochs = 120):
+    def train(self, trainDS, epochs = 80):
         losses = []
         for e in range(epochs):
-            print("epoch %d." % e)
+            print("   epoch %d." % e)
             epochLoss = 0.0
             for i, rec in enumerate(trainDS):
-                preds = self.forward(rec["premise"], rec["hypothesis"])
-                loss = ((preds - rec["entailment"]) ** 2)
+                y = rec["entailment"]
+                pred = self.forward(rec["premise"], rec["hypothesis"])
+                loss = ((pred - y) ** 2).mean()
                 self.opt.zero_grad()
-                #loss.backward()
-                #epochLoss += loss.item()
-                epochLoss += loss
+                loss.backward()
+                epochLoss += loss.item()
                 self.opt.step()
             losses.append(epochLoss)
+            print("      Done. Loss = %f." % epochLoss)
         return losses
 
-    def run(self, runDS):
+    def test(self, testDS):
         results = []
-        for i, rec in enumerate(runDS):
-            pred = self.forward(rec["premise"], rec["hypothesis"])
+        epochLoss = 0.0
+        for i, rec in enumerate(testDS):
+            y = rec["entailment"]
+            pred = round(self.forward(rec["premise"], rec["hypothesis"]).item())
             results.append(pred)
-        return results
-
+            epochLoss += ((pred - y) ** 2)
+        return (results, epochLoss)
 
 
 def main():
@@ -100,9 +116,12 @@ def main():
     validRecs = readData("./GeneratedDatasets/validate.csv")
     #testRecs = readData("./GeneratedDatasets/test.csv")
 
+    #trainRecs = pd.DataFrame(trainRecs)
+    #validRecs = pd.DataFrame(validRecs)
+
     tc = TextualEntailmentClassifier()
     print(tc.train(trainRecs,10))
-    print(tc.run(validRecs))
+    print(tc.test(validRecs))
 
 
 if __name__ == '__main__':
