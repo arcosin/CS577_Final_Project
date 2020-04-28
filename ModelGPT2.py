@@ -65,6 +65,7 @@ class TextualEntailmentClassifier:
           
         #predicted_index = torch.argmax(predictions[0, -1, :]).item()
         #predicted_text = self.tokenizer.decode(indexed_tokens + [predicted_index])
+        #return torch.FloatTensor(predictions)
         return predictions
         #return predicted_text
 
@@ -73,7 +74,7 @@ class TextualEntailmentClassifier:
         embedA = self.embed(premis)
         embedB = self.embed(hypothesis)
 
-        embedC = torch.stack(embedA + embedB).unsqueeze(1)
+        embedC = torch.stack((embedA, embedB)).unsqueeze(1)
 
         embedLSTM = nn.LSTM(embedC)
 
@@ -126,5 +127,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
