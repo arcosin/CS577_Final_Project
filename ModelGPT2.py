@@ -1,4 +1,4 @@
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, GPT2Model, GPT2Config
 import pandas as pd
 import csv
 
@@ -32,55 +32,46 @@ def readData(filename):
 class TextualEntailmentClassifier:
     def __init__(self, lr = 0.0001):
         self.lr = lr
+        self.lm = nn.LSTM(768, 200)
+        self.l1 = nn.Linear(200* 2, 80)
+        self.l2 = nn.Linear(80, 1)
 
         # Load pre-trained model tokenizer (vocabulary)
         self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
+        self.config = GPT2Config()
         # Load pre-trained model (weights)
-        self.model = GPT2LMHeadModel.from_pretrained('gpt2')
+        self.model = GPT2Model(self.config).from_pretrained('gpt2')
 
         self.opt = optim.Adam(self.model.parameters(), lr = lr)
 
     def embed(self, sentence):
-        # Encode a text inputs
-        #text = "Who was Jim Henson ? Jim Henson was a"
-        text = sentence
-        indexed_tokens = self.tokenizer.encode(text)
+        input_ids = torch.tensor(self.tokenizer.encode(sentence, add_special_tokens=False)).unsqueeze(0)  # Batch size 1
+        outputs = self.model(input_ids)
 
-        # Convert indexed tokens in a PyTorch tensor
-        tokens_tensor = torch.tensor([indexed_tokens])
+        # The last hidden-state is the first element of the output tuple
+        last_hidden_states = outputs[0]  
 
-        # Set the model in evaluation mode to deactivate the DropOut modules
-        # This is IMPORTANT to have reproducible results during evaluation!
-        self.model.eval()
+        #em = self.model.get_input_embeddings()
+        #return em(input_ids)
 
-        # If you have a GPU, put everything on cuda
-        #tokens_tensor = tokens_tensor.to('cuda')
-        #model.to('cuda')
-
-        # Predict all tokens
-        with torch.no_grad():
-            outputs = self.model(tokens_tensor)
-            predictions = outputs[0]
-          
-        #predicted_index = torch.argmax(predictions[0, -1, :]).item()
-        #predicted_text = self.tokenizer.decode(indexed_tokens + [predicted_index])
-        #return torch.FloatTensor(predictions)
-        return predictions
-        #return predicted_text
+        return last_hidden_states
 
 
     def forward(self, premis, hypothesis):
         embedA = self.embed(premis)
         embedB = self.embed(hypothesis)
 
-        embedC = torch.stack((embedA, embedB)).unsqueeze(1)
+        embedC = torch.cat((embedA, embedB), dim=1)
 
-        embedLSTM = nn.LSTM(embedC)
+        #embedLSTM = self.lm(embedC)
+        _, (embedLSTM, _) = self.lm(embedC)
 
         embedLSTM = torch.flatten(embedLSTM)
-        t = F.relu(nn.Linear(embedLSTM))
-        y = torch.sigmoid(nn.Linear(t))
+
+        t = F.relu(self.l1(embedLSTM))
+
+        y = torch.sigmoid(self.l2(t))
         return y
 
 
