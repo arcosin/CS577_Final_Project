@@ -13,7 +13,7 @@ class BuildTemporalDataset(BuildDataset.BuildDataset):
         incorrectRecords = []
 
         # template 1
-        premise = Template("The $J0 went to $L0 $T0.")
+        premise = Template("The $J0 went to $L0 $T0")
         hypothesis = Template("The $J0 visited $L0")
 
         for temp in extraDatasets["tempModifiers"]:
@@ -27,7 +27,7 @@ class BuildTemporalDataset(BuildDataset.BuildDataset):
 
 
         # template 2
-        premise = Template("The $J1 went to $L1.")
+        premise = Template("The $J1 went to $L1")
         hypothesis = Template("The $J1 visited $L1 $T1")
 
         for temp in extraDatasets["tempModifiers"]:
@@ -43,7 +43,7 @@ class BuildTemporalDataset(BuildDataset.BuildDataset):
         return (correctRecords, incorrectRecords)
 
         # template 3
-        premise = Template("The $J1 remembers going to $L1 $T1.")
+        premise = Template("The $J1 remembers going to $L1 $T1")
         hypothesis = Template("The $J1 visited $L1")
 
         for temp in extraDatasets["tempModifiers"]:
