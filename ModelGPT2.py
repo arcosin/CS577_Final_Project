@@ -34,10 +34,10 @@ def readData(filename, experimental = True):
 class TextualEntailmentClassifier:
     def __init__(self, lr = 0.0001):
         self.lr = lr
-        self.lm = nn.Linear(768, 200)
-        self.l1 = nn.Linear(200*2, 80)
-        #self.l1 = nn.Linear(3200,80)
-        self.l2 = nn.Linear(80, 1)
+        #self.lm = nn.Linear(768, 200)
+        #self.l1 = nn.Linear(200*2, 80)
+        self.l1 = nn.Linear(768, 80)
+        self.l2 = nn.Linear(80*2, 1)
 
         # Load pre-trained model tokenizer (vocabulary)
         self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
@@ -68,11 +68,11 @@ class TextualEntailmentClassifier:
         #embedC = torch.cat((embedA,embedB),dim=1).unsqueeze(1)
 
         #_, (embedLSTM, _) = self.lm(embedC)
-        embedLSTM = self.lm(embedC)
+        embedLSTM = self.l1(embedC)
 
         embedLSTM = torch.flatten(embedLSTM)
 
-        t = F.relu(self.l1(embedLSTM))
+        t = F.relu(embedLSTM)
 
         y = torch.sigmoid(self.l2(t))
 
