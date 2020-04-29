@@ -32,8 +32,8 @@ def readData(filename):
 class TextualEntailmentClassifier:
     def __init__(self, lr = 0.0001):
         self.lr = lr
-        self.lm = nn.LSTM(768, 200)
-        self.l1 = nn.Linear(200, 80)
+        self.lm = nn.Linear(768, 200)
+        self.l1 = nn.Linear(200*2, 80)
         #self.l1 = nn.Linear(2800,1)
         self.l2 = nn.Linear(80, 1)
 
@@ -61,7 +61,8 @@ class TextualEntailmentClassifier:
 
         embedC = torch.stack((embedA,embedB)).unsqueeze(1)
 
-        _, (embedLSTM, _) = self.lm(embedC)
+        #_, (embedLSTM, _) = self.lm(embedC)
+        embedLSTM = self.lm(embedC)
 
         embedLSTM = torch.flatten(embedLSTM)
 
