@@ -14,19 +14,21 @@ import torch.optim as optim
 
 torch.manual_seed(13011)
 
-def readData(filename):
-    with open(filename) as csvfile:
-        records = []
-        dataReader = csv.reader(csvfile, delimiter = ',', quotechar = '\'')
-        next(dataReader)
-        for row in dataReader:
-            rec = dict()
-            rec["id"] = row[0]
-            rec["premise"] = row[1].split(' ')
-            rec["hypothesis"] = row[2].split(' ')
-            rec["entailment"] = 1 if row[3] == "True" else 0
-            rec["type"] = row[4]
-            records.append(rec)
+def readData(filename, experimental = True):
+    df = pd.read_csv(filename)
+    if experimental:
+        df = df.loc[df['category'] != 'baseline']
+    else:
+        df = df.loc[df['category'] == 'baseline']
+    records = []
+    for index, row in df.iterrows():
+        rec = dict()
+        rec["id"] = row[0]
+        rec["premise"] = str(row["premis"]).strip(" .!?,").split(' ')
+        rec["hypothesis"] = str(row["hypothesis"]).strip(" .!?,").split(' ')
+        rec["entailment"] = 1 if row["label"] == True else 0
+        rec["type"] = row["category"]
+        records.append(rec)
     return records
 
 class TextualEntailmentClassifier:
@@ -34,7 +36,7 @@ class TextualEntailmentClassifier:
         self.lr = lr
         self.lm = nn.Linear(768, 200)
         self.l1 = nn.Linear(200*2, 80)
-        #self.l1 = nn.Linear(2800,1)
+        #self.l1 = nn.Linear(3200,80)
         self.l2 = nn.Linear(80, 1)
 
         # Load pre-trained model tokenizer (vocabulary)
@@ -52,14 +54,16 @@ class TextualEntailmentClassifier:
     def embed(self, sentence):
         input_ids = torch.tensor(self.tokenizer.encode(sentence, add_special_tokens=False)).unsqueeze(0)  # Batch size 1
 
-        # only getting embedding for first word of sentence??
-        return self.emb(input_ids)[0][0]
+        # average each word vector to make sentence vector
+        return torch.mean(self.emb(input_ids), dim=1)
 
     def forward(self, premis, hypothesis):
         embedA = self.embed(premis)
         embedB = self.embed(hypothesis)
 
         embedC = torch.stack((embedA,embedB)).unsqueeze(1)
+        #embedC = torch.cat((embedA,embedB),dim=1).unsqueeze(1)
+
 
         #_, (embedLSTM, _) = self.lm(embedC)
         embedLSTM = self.lm(embedC)
@@ -102,7 +106,7 @@ class TextualEntailmentClassifier:
 
 
 def main():
-    trainRecs = readData("./GeneratedDatasets/train.csv")
+    trainRecs = readData("./GeneratedDatasets/train.csv.bak", False)
     validRecs = readData("./GeneratedDatasets/validate.csv")
     #testRecs = readData("./GeneratedDatasets/test.csv")
 
