@@ -33,38 +33,34 @@ class TextualEntailmentClassifier:
     def __init__(self, lr = 0.0001):
         self.lr = lr
         self.lm = nn.LSTM(768, 200)
-        self.l1 = nn.Linear(200* 2, 80)
+        self.l1 = nn.Linear(200, 80)
+        #self.l1 = nn.Linear(2800,1)
         self.l2 = nn.Linear(80, 1)
 
         # Load pre-trained model tokenizer (vocabulary)
         self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 
         self.config = GPT2Config()
+
         # Load pre-trained model (weights)
         self.model = GPT2Model(self.config).from_pretrained('gpt2')
 
         self.opt = optim.Adam(self.model.parameters(), lr = lr)
 
+        self.emb = self.model.get_input_embeddings()
+
     def embed(self, sentence):
         input_ids = torch.tensor(self.tokenizer.encode(sentence, add_special_tokens=False)).unsqueeze(0)  # Batch size 1
-        outputs = self.model(input_ids)
 
-        # The last hidden-state is the first element of the output tuple
-        last_hidden_states = outputs[0]  
-
-        #em = self.model.get_input_embeddings()
-        #return em(input_ids)
-
-        return last_hidden_states
-
+        # only getting embedding for first word of sentence??
+        return self.emb(input_ids)[0][0]
 
     def forward(self, premis, hypothesis):
         embedA = self.embed(premis)
         embedB = self.embed(hypothesis)
 
-        embedC = torch.cat((embedA, embedB), dim=1)
+        embedC = torch.stack((embedA,embedB)).unsqueeze(1)
 
-        #embedLSTM = self.lm(embedC)
         _, (embedLSTM, _) = self.lm(embedC)
 
         embedLSTM = torch.flatten(embedLSTM)
@@ -72,6 +68,7 @@ class TextualEntailmentClassifier:
         t = F.relu(self.l1(embedLSTM))
 
         y = torch.sigmoid(self.l2(t))
+
         return y
 
 
