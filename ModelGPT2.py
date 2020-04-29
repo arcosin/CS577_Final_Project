@@ -54,16 +54,18 @@ class TextualEntailmentClassifier:
     def embed(self, sentence):
         input_ids = torch.tensor(self.tokenizer.encode(sentence, add_special_tokens=False)).unsqueeze(0)  # Batch size 1
 
+        embeds = self.emb(input_ids)
+        result = embeds[0][len(embeds[0])-1]
+
         # average each word vector to make sentence vector
-        return torch.mean(self.emb(input_ids), dim=1)
+        #return torch.mean(self.emb(input_ids), dim=1)
+        return result
 
     def forward(self, premis, hypothesis):
         embedA = self.embed(premis)
         embedB = self.embed(hypothesis)
-
         embedC = torch.stack((embedA,embedB)).unsqueeze(1)
         #embedC = torch.cat((embedA,embedB),dim=1).unsqueeze(1)
-
 
         #_, (embedLSTM, _) = self.lm(embedC)
         embedLSTM = self.lm(embedC)
@@ -104,10 +106,16 @@ class TextualEntailmentClassifier:
             epochLoss += ((pred - y) ** 2)
         return (results, epochLoss)
 
+def accuracy(preds, ys):
+    correct = 0.0
+    for pred, y in zip(preds, ys):
+        if pred == y:
+            correct += 1.0
+    return correct / float(len(ys))
 
 def main():
-    trainRecs = readData("./GeneratedDatasets/train.csv.bak", False)
-    validRecs = readData("./GeneratedDatasets/validate.csv")
+    trainRecs = readData("./GeneratedDatasets/train.csv", False)
+    validRecs = readData("./GeneratedDatasets/validate.csv",False)
     #testRecs = readData("./GeneratedDatasets/test.csv")
 
     #trainRecs = pd.DataFrame(trainRecs)
@@ -116,6 +124,10 @@ def main():
     tc = TextualEntailmentClassifier()
     print(tc.train(trainRecs,10))
     print(tc.test(validRecs))
+
+    res, loss = tc.test(validRecs)
+    validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+    print("   Accuracy = %f." % validAcc)
 
 
 if __name__ == '__main__':
