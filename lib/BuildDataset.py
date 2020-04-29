@@ -25,7 +25,7 @@ class BuildDataset():
         else:
             self.tree = self.buildTree(self.dirname + tree_infile)
             self.goodPairs = self.buildCorrectPairs(self.tree)
-            self.badPairs = self.buildIncorrectPairs(self.tree, self.goodPairs)
+            #self.badPairs = self.buildIncorrectPairs(self.tree, self.goodPairs)  #NOTE: I think this can just be removed.
             self.ent, self.nonEnt = self.buildRecords(self.goodPairs, self.extraDatasets)
 
         self.writeDataset(cor_outfile, self.ent)
