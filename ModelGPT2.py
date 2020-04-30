@@ -128,7 +128,7 @@ def main():
     #trainRecs = pd.DataFrame(trainRecs)
     #validRecs = pd.DataFrame(validRecs
 
-    tc = TextualEntailmentClassifier()
+    tc = TextualEntailmentClassifier(.0001)
     tc.cuda()
     tc.train(trainRecs,80)
     #tc.test(validRecs)
