@@ -31,13 +31,14 @@ def readData(filename, experimental = True):
         records.append(rec)
     return records
 
-class TextualEntailmentClassifier:
+class TextualEntailmentClassifier(nn.Module):
     def __init__(self, lr = 0.0001):
+        super().__init__()
         self.lr = lr
         #self.lm = nn.Linear(768, 200)
         #self.l1 = nn.Linear(200*2, 80)
-        self.l1 = nn.Linear(768, 80)
-        self.l2 = nn.Linear(80*2, 1)
+        self.l1 = nn.Linear(768, 80).cuda()
+        self.l2 = nn.Linear(80*2, 1).cuda()
 
         # Load pre-trained model tokenizer (vocabulary)
         self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
@@ -46,15 +47,16 @@ class TextualEntailmentClassifier:
 
         # Load pre-trained model (weights)
         self.model = GPT2Model(self.config).from_pretrained('gpt2')
+        self.model.cuda()
 
         self.opt = optim.Adam(self.model.parameters(), lr = lr)
 
-        self.emb = self.model.get_input_embeddings()
+        self.emb = self.model.get_input_embeddings().cuda()
 
     def embed(self, sentence):
-        input_ids = torch.tensor(self.tokenizer.encode(sentence, add_special_tokens=False)).unsqueeze(0)  # Batch size 1
+        input_ids = torch.tensor(self.tokenizer.encode(sentence, add_special_tokens=False)).unsqueeze(0).cuda()  # Batch size 1
 
-        embeds = self.emb(input_ids)
+        embeds = self.emb(input_ids).cuda()
         result = embeds[0][len(embeds[0])-1]
 
         # average each word vector to make sentence vector
@@ -62,19 +64,19 @@ class TextualEntailmentClassifier:
         return result
 
     def forward(self, premis, hypothesis):
-        embedA = self.embed(premis)
-        embedB = self.embed(hypothesis)
+        embedA = self.embed(premis).cuda()
+        embedB = self.embed(hypothesis).cuda()
         embedC = torch.stack((embedA,embedB)).unsqueeze(1)
         #embedC = torch.cat((embedA,embedB),dim=1).unsqueeze(1)
 
         #_, (embedLSTM, _) = self.lm(embedC)
-        embedLSTM = self.l1(embedC)
+        embedLSTM = self.l1(embedC).cuda()
 
-        embedLSTM = torch.flatten(embedLSTM)
+        embedLSTM = torch.flatten(embedLSTM).cuda()
 
-        t = F.relu(embedLSTM)
+        t = F.relu(embedLSTM).cuda()
 
-        y = torch.sigmoid(self.l2(t))
+        y = torch.sigmoid(self.l2(t)).cuda()
 
         return y
 
@@ -114,6 +116,11 @@ def accuracy(preds, ys):
     return correct / float(len(ys))
 
 def main():
+    torch.cuda.init()
+    print("cuda",torch.cuda.device(0))
+    print("available",torch.cuda.is_available())
+    print("init",torch.cuda.is_initialized())
+
     trainRecs = readData("./GeneratedDatasets/train.csv", False)
     validRecs = readData("./GeneratedDatasets/validate.csv",False)
     #testRecs = readData("./GeneratedDatasets/test.csv")
@@ -122,6 +129,7 @@ def main():
     #validRecs = pd.DataFrame(validRecs)
 
     tc = TextualEntailmentClassifier()
+    tc.cuda()
     print(tc.train(trainRecs,10))
     print(tc.test(validRecs))
 
