@@ -57,11 +57,11 @@ class TextualEntailmentClassifier(nn.Module):
         input_ids = torch.tensor(self.tokenizer.encode(sentence, add_special_tokens=False)).unsqueeze(0).cuda()  # Batch size 1
 
         embeds = self.emb(input_ids)
-        result = embeds[0][len(embeds[0])-1]
+        #result = embeds[0][len(embeds[0])-1]
 
         # average each word vector to make sentence vector
-        #return torch.mean(self.emb(input_ids), dim=1)
-        return result
+        return torch.mean(self.emb(input_ids), dim=1)
+        #return result
 
     def forward(self, premis, hypothesis):
         embedA = self.embed(premis)
