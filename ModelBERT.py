@@ -122,8 +122,8 @@ def main():
     print("available",torch.cuda.is_available())
     print("init",torch.cuda.is_initialized())
 
-    trainRecs = readData("./GeneratedDatasets/train.csv", False)
-    validRecs = readData("./GeneratedDatasets/validate.csv",False)
+    trainRecs = readData("GeneratedDatasets/train.csv", False)
+    validRecs = readData("GeneratedDatasets/validate.csv",False)
     #testRecs = readData("./GeneratedDatasets/test.csv")
 
     #trainRecs = pd.DataFrame(trainRecs)
@@ -140,3 +140,4 @@ def main():
 
 
 if __name__ == '__main__':
+    main()
