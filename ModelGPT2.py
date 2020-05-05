@@ -137,33 +137,6 @@ def accuracy(preds, ys):
         print(e)
         return 0
 
-def getAcc(res,validRecs, category, label):
-    recs_df = pd.DataFrame(validRecs)
-
-    recs_df = recs_df[recs_df['type'] == category]
-    recs_df = recs_df[recs_df['entailment'] == label]
-
-    filter_recs = recs_df.to_dict()
-
-    validAcc = accuracy(res, [rec["entailment"] for rec in filter_recs])
-
-    print(category, label, validAcc)
-
-
-def getAllAccs(res,validRecs):
-    getAcc(res,validRecs,"composition", 0)
-    getAcc(res,validRecs,"composition", 1)
-
-    getAcc(res,validRecs,"locational", 0)
-    getAcc(res,validRecs,"locational", 1)
-
-    getAcc(res,validRecs,"htemporal", 0)
-    getAcc(res,validRecs,"htemporal", 1)
-
-    getAcc(res,validRecs,"hypernym", 0)
-    getAcc(res,validRecs,"hypernym", 1)
-    
-
 def main():
     torch.cuda.init()
     print("cuda",torch.cuda.device(0))
