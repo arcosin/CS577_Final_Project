@@ -154,7 +154,7 @@ def main():
     tc.train(trainRecs,EPOCHS)
 
 
-    valid_file = "./FinalData/validate.csv.bak"
+    valid_file = "./FinalData/validate.csv"
     if IS_EXPERIMENTAL:
         validRecs = readData2(valid_file,'composition',False)
         res, loss = tc.test(validRecs)
