@@ -133,7 +133,7 @@ class TextualEntailmentClassifier:
         self.opt = optim.Adam(self.model.parameters(), lr = lr)
         self.bceLoss = nn.BCELoss()
 
-    def train(self, trainDS, epochs = 40):
+    def train(self, trainDS, epochs = 30):
         losses = []
         for e in range(epochs):
             print("   epoch %d." % e)
@@ -193,8 +193,8 @@ class TextualEntailmentClassifier:
 
 
 def main():
-    trainRecs = readData("./GeneratedDatasets/train.csv", experimental = False)
-    testRecs = readData("./GeneratedDatasets/test.csv", experimental = False)
+    trainRecs = readData("./FinalData/train.csv", experimental = False)
+    testRecs = readData("./FinalData/test.csv", experimental = False)
     model = BiLMTextualEntailmentModel()
     tec = TextualEntailmentClassifier(model)
     tec.resetHead()
@@ -208,8 +208,8 @@ def main():
     #print("   Baseline accuracy = %f." % testAcc, flush = True)
     testAcc = accuracyByCategory(res, [rec["entailment"] for rec in testRecs], [rec["type"] for rec in testRecs])
     print("   Baseline accuracy:\n%s" % testAcc, flush = True)
-    trainRecs = readData("./GeneratedDatasets/train.csv", experimental = True)
-    testRecs = readData("./GeneratedDatasets/test.csv", experimental = True)
+    trainRecs = readData("./FinalData/train.csv", experimental = True)
+    testRecs = readData("./FinalData/test.csv", experimental = True)
     print("Freezing LM and resetting head.", flush = True)
     tec.freezeLM()
     tec.resetHead()
@@ -223,8 +223,8 @@ def main():
     #print("   Experimental accuracy (no retrain) = %f." % testAcc, flush = True)
     testAcc = accuracyByCategory(res, [rec["entailment"] for rec in testRecs], [rec["type"] for rec in testRecs])
     print("   Experimental accuracy (no retrain):\n%s" % testAcc, flush = True)
-    trainRecs = readData("./GeneratedDatasets/train.csv", experimental = True)
-    testRecs = readData("./GeneratedDatasets/test.csv", experimental = True)
+    trainRecs = readData("./FinalData/train.csv", experimental = True)
+    testRecs = readData("./FinalData/test.csv", experimental = True)
     print("Unfreezing LM and resetting head.", flush = True)
     tec.unfreezeLM()
     tec.resetHead()
