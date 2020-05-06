@@ -35,52 +35,51 @@ def finalizeData(MAX_EXAMPLES = 10000, SPLIT_PERC = 10):
     # look through each file in generated datasets
     for subdir, dirs, files in os.walk("GeneratedDatasets"):
         for file_name in files:
-            if file_name == ".gitignore" or file_name == "train.csv" or file_name == "test.csv" or file_name == "validate.csv":
-                continue
-            # get the full file path
-            filepath = subdir + os.sep + file_name
+            if(file_name != '.gitignore'):
+                # get the full file path
+                filepath = subdir + os.sep + file_name
 
-            # display which file were on to track progress
-            print(filepath)
+                # display which file were on to track progress
+                print(filepath)
 
-            # open the file
-            f = open(filepath, 'r')
+                # open the file
+                f = open(filepath, 'r')
 
-            # get number of lines in file
-            lines = f.readlines()
+                # get number of lines in file
+                lines = f.readlines()
 
-            # if the number of lines is > MAX_EXAMPLES
-            # then randomly choose MAX_EXAMPLE lines to keep in lines_to_append
-            while len(lines) > MAX_EXAMPLES:
-                del lines[random.randint(0,len(lines)-1)]
+                # if the number of lines is > MAX_EXAMPLES
+                # then randomly choose MAX_EXAMPLE lines to keep in lines_to_append
+                while len(lines) > MAX_EXAMPLES:
+                    del lines[random.randint(0,len(lines)-1)]
 
-            # category is the first part of the file name
-            category = file_name.split('_')[0]
+                # category is the first part of the file name
+                category = file_name.split('_')[0]
 
-            # loop through the lines to include
-            for line in lines:
-                # strip special characters
-                line = line.replace('(', '')
-                line = line.replace(')', '')
-                line = line.replace('\n', '')
-                line = line.replace('\'', '')
-                line = line.replace('\"', '')
+                # loop through the lines to include
+                for line in lines:
+                    # strip special characters
+                    line = line.replace('(', '')
+                    line = line.replace(')', '')
+                    line = line.replace('\n', '')
+                    line = line.replace('\'', '')
+                    line = line.replace('\"', '')
 
-                # split hyp/prem/label
-                line = line.split(',')
+                    # split hyp/prem/label
+                    line = line.split(',')
 
-                # form our new row to append to result
-                new_row = {'hypothesis':line[0], 'premis':line[1], 'label':line[2].strip(), 'category':category}
+                    # form our new row to append to result
+                    new_row = {'hypothesis':line[0], 'premis':line[1], 'label':line[2].strip(), 'category':category}
 
-                # append the new row to result
-                which_set = random.randint(0,100)
+                    # append the new row to result
+                    which_set = random.randint(0,100)
 
-                if which_set < SPLIT_PERC:
-                    test_df = test_df.append(new_row, ignore_index=True)
-                elif which_set >= SPLIT_PERC and which_set < SPLIT_PERC*2:
-                    val_df = val_df.append(new_row, ignore_index=True)
-                else:
-                    train_df = train_df.append(new_row, ignore_index=True)
+                    if which_set < SPLIT_PERC:
+                        test_df = test_df.append(new_row, ignore_index=True)
+                    elif which_set >= SPLIT_PERC and which_set < SPLIT_PERC*2:
+                        val_df = val_df.append(new_row, ignore_index=True)
+                    else:
+                        train_df = train_df.append(new_row, ignore_index=True)
 
 
     train_df.to_csv("GeneratedDatasets/train.csv")

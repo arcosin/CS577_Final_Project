@@ -31,6 +31,24 @@ def readData(filename, experimental = True):
         records.append(rec)
     return records
 
+
+def readData2(filename, category, label):
+    df = pd.read_csv(filename)
+    df = df.loc[df['category'] == category]
+    df = df.loc[df['label'] == label]
+    records = []
+    for index, row in df.iterrows():
+        rec = dict()
+        rec["id"] = row[0]
+        rec["premise"] = str(row["premis"]).strip(" .!?,").split(' ')
+        rec["hypothesis"] = str(row["hypothesis"]).strip(" .!?,").split(' ')
+        rec["entailment"] = 1 if row["label"] == True else 0
+        rec["type"] = row["category"]
+        records.append(rec)
+    return records
+
+
+
 class TextualEntailmentClassifier(nn.Module):
     def __init__(self, lr = 0.0001):
         super().__init__()
@@ -109,11 +127,15 @@ class TextualEntailmentClassifier(nn.Module):
         return (results, epochLoss)
 
 def accuracy(preds, ys):
-    correct = 0.0
-    for pred, y in zip(preds, ys):
-        if pred == y:
-            correct += 1.0
-    return correct / float(len(ys))
+    try:
+        correct = 0.0
+        for pred, y in zip(preds, ys):
+            if pred == y:
+                correct += 1.0
+        return correct / float(len(ys))
+    except Exception as e:
+        print(e)
+        return 0
 
 def main():
     torch.cuda.init()
@@ -121,20 +143,86 @@ def main():
     print("available",torch.cuda.is_available())
     print("init",torch.cuda.is_initialized())
 
-    trainRecs = readData("./GeneratedDatasets/train.csv", False)
-    validRecs = readData("./GeneratedDatasets/validate.csv",False)
-    #testRecs = readData("./GeneratedDatasets/test.csv")
+    IS_EXPERIMENTAL = True
+    EPOCHS=80
 
-    #trainRecs = pd.DataFrame(trainRecs)
-    #validRecs = pd.DataFrame(validRecs
+    trainRecs = readData("./FinalData/train.csv", IS_EXPERIMENTAL)
+
 
     tc = TextualEntailmentClassifier(.0001)
     tc.cuda()
-    tc.train(trainRecs,80)
-    #tc.test(validRecs)
+    tc.train(trainRecs,EPOCHS)
 
+
+    valid_file = "./FinalData/validate.csv"
+    if IS_EXPERIMENTAL:
+        validRecs = readData2(valid_file,'composition',False)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("composition", 0)
+        print("   Accuracy = %f." % validAcc)
+
+        validRecs = readData2(valid_file,'composition',True)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("composition", 1)
+        print("   Accuracy = %f." % validAcc)
+
+        validRecs = readData2(valid_file,'locational',False)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("locational", 0)
+        print("   Accuracy = %f." % validAcc)
+
+
+        validRecs = readData2(valid_file,'locational',True)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("locational", 1)
+        print("   Accuracy = %f." % validAcc)
+
+
+        validRecs = readData2(valid_file,'htemporal',False)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("htemporal", 0)
+        print("   Accuracy = %f." % validAcc)
+
+        validRecs = readData2(valid_file,'htemporal',True)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("htemporal", 1)
+        print("   Accuracy = %f." % validAcc)
+
+        validRecs = readData2(valid_file,'temporal',False)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("temporal", 0)
+        print("   Accuracy = %f." % validAcc)
+
+        validRecs = readData2(valid_file,'temporal',True)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("temporal", 1)
+        print("   Accuracy = %f." % validAcc)
+
+        validRecs = readData2(valid_file,'hypernym',False)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("hypernym", 0)
+        print("   Accuracy = %f." % validAcc)
+
+        validRecs = readData2(valid_file,'hypernym',True)
+        res, loss = tc.test(validRecs)
+        validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+        print("hypernym", 1)
+        print("   Accuracy = %f." % validAcc)
+
+
+    validRecs = readData(valid_file,IS_EXPERIMENTAL)
     res, loss = tc.test(validRecs)
     validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
+    print("total")
     print("   Accuracy = %f." % validAcc)
 
 

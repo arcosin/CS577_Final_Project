@@ -13,8 +13,8 @@ class BuildHierarchicalTemporalDataset(BuildDataset.BuildDataset):
         incorrectRecords = []
 
         # template 1
-        premise = Template("The $J1 went to $L1 more than a $T1 ago")
-        hypothesis = Template("The $J1 went to $L1 more than a $T2 ago.")
+        premise = Template("The $J1 went to $L1 more than one $T1 ago")
+        hypothesis = Template("The $J1 went to $L1 more than one $T2 ago")
         for i, pair in enumerate(correctPairs):
             for job in extraDatasets["jobs"]:
                 location = random.choice(extraDatasets["locations"])
