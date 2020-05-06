@@ -9,8 +9,7 @@ class BuildBaselineDataset(BuildDataset.BuildDataset):
         super().__init__(tree_infile, cor_outfile, inc_outfile, type)
 
     def buildRecords(self, correctPairs, ds):
-        maxRecordsPerTemplate = 10
-
+        maxRecordsPerTemplate = 2000
         correctRecords = []
         incorrectRecords = []
         premise = Template("There is a $A in $L.")
@@ -68,7 +67,14 @@ class BuildBaselineDataset(BuildDataset.BuildDataset):
         hypothesis1 = Template("The $J likes the $A1.")
         hypothesis2 = Template("The $J likes the $A2.")
         hypothesis3 = Template("The $J enjoys the $A2 and the $A1.")
-        recTris = [(j, a1, a2) for j in ds["jobs"] for a1 in ds["animals"] for a2 in ds["animals"]]
+        recTris = set()
+        while len(recTris) <= maxRecordsPerTemplate:
+            j = random.choice(ds["jobs"])
+            a1 = random.choice(ds["animals"])
+            a2 = random.choice(ds["animals"])
+            if a1 == a2:   continue
+            recTris.add((j, a1, a2))
+        recTris = list(recTris)
         i = 0
         for job, a1, a2 in recTris:
             if a1 != a2:
@@ -87,13 +93,14 @@ class BuildBaselineDataset(BuildDataset.BuildDataset):
         hypothesis2 = Template("$N has a house in $L.")
         hypothesis3 = Template("The $A is a $J.")
         hypothesis4 = Template("$N has a pet $J.")
-        recQuads = []
+        recQuads = set()
         for _ in range(maxRecordsPerTemplate):
             n = random.choice(ds["names"])
             j = random.choice(ds["jobs"])
             a = random.choice(ds["animals"])
             l = random.choice(ds["locations"])
-            recQuads.append((n, j, a, l))
+            recQuads.add((n, j, a, l))
+        recQuads = list(recQuads)
         i = 0
         for n, j, a, l in recQuads:
             pCor = premise.substitute(N = n, J = j, A = a, L = l)
