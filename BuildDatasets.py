@@ -27,7 +27,7 @@ def buildAll():
     print("Building baseline")
     BuildBaselineDataset("compositions.csv", "GeneratedDatasets/baseline_entailment.txt","GeneratedDatasets/baseline_nonentailment.txt","compositions")
 
-def finalizeData(MAX_EXAMPLES = 100, SPLIT_PERC = 10):
+def finalizeData(MAX_EXAMPLES = 10000, SPLIT_PERC = 10):
     train_df = pd.DataFrame(columns=['hypothesis','premis','label', 'category'])
     val_df = pd.DataFrame(columns=['hypothesis','premis','label', 'category'])
     test_df = pd.DataFrame(columns=['hypothesis','premis','label', 'category'])

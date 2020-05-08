@@ -1,6 +1,7 @@
 
 
 import csv
+from collections import defaultdict
 from timeit import default_timer as timer
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -56,10 +57,33 @@ def accuracy(preds, ys):
     return correct / float(len(ys))
 
 
+def accuracyByCategory(preds, ys, types):
+    possibleTypes = set(types)
+    yToStrMap = {0: "non-entailment", 1: "entailment"}
+    accDict = defaultdict(lambda: [0.0, 0.0])
+    for pred, y, t in zip(preds, ys, types):
+        label = yToStrMap[y]
+        accDict["all"][0] += 1.0
+        accDict[t][0] += 1.0
+        accDict[label][0] += 1.0
+        accDict[t + "_" + label][0] += 1.0
+        if pred == y:
+            accDict["all"][1] += 1.0
+            accDict[t][1] += 1.0
+            accDict[label][1] += 1.0
+            accDict[t + "_" + label][1] += 1.0
+    for k in accDict.keys():
+        accDict[k] = accDict[k][1] / accDict[k][0]
+    return dict(accDict)
+
+
+
+
+
 
 
 class BiLMTextualEntailmentModel(nn.Module):
-    def __init__(self, lstmSize = 200, hiddenSize = 300, h1 = 80):
+    def __init__(self, lstmSize = 30, hiddenSize = 300, h1 = 20):
         super().__init__()
         self.embedder = KeyedVectors.load_word2vec_format(datapath(WORD_2_VEC_PATH), binary = True)
         self.lm = nn.LSTM(hiddenSize + 2, lstmSize, bidirectional = True)
@@ -103,26 +127,32 @@ class BiLMTextualEntailmentModel(nn.Module):
 
 
 class TextualEntailmentClassifier:
-    def __init__(self, model, lr = 0.0001):
+    def __init__(self, model, lr = 0.00001):
         self.model = model
         self.lr = lr
         self.opt = optim.Adam(self.model.parameters(), lr = lr)
+        self.bceLoss = nn.BCELoss()
 
-    def train(self, trainDS, epochs = 80):
+    def train(self, trainDS, epochs = 30):
         losses = []
         for e in range(epochs):
             print("   epoch %d." % e)
             epochLoss = 0.0
+            ys = []
+            preds = []
             for i, rec in enumerate(trainDS):
-                y = rec["entailment"]
+                y = torch.FloatTensor([rec["entailment"]])
                 pred = self.model(rec["premise"], rec["hypothesis"])
-                loss = ((pred - y) ** 2).mean()
+                preds.append(round(pred.item()))
+                ys.append(rec["entailment"])
+                #loss = ((pred - y) ** 2).mean()
+                loss = self.bceLoss(pred, y)
                 self.opt.zero_grad()
                 loss.backward()
                 epochLoss += loss.item()
                 self.opt.step()
             losses.append(epochLoss)
-            print("      Done. Loss = %f." % epochLoss)
+            print("      Done. Loss = %f, Accuracy = %f." % (epochLoss, accuracy(preds, ys)), flush = True)
         return losses
 
     def run(self, runDS):
@@ -150,6 +180,11 @@ class TextualEntailmentClassifier:
         for param in self.model.lm.parameters():
             param.requires_grad = True
 
+    def resetHead(self, lr = 0.00001):
+        torch.nn.init.xavier_uniform_(self.model.l1.weight)
+        torch.nn.init.xavier_uniform_(self.model.l2.weight)
+        self.opt = optim.Adam(self.model.parameters(), lr = lr)
+
 
 
 
@@ -158,17 +193,51 @@ class TextualEntailmentClassifier:
 
 
 def main():
-    trainRecs = readData("./GeneratedDatasets/train.csv", experimental = False)
-    validRecs = readData("./GeneratedDatasets/validate.csv", experimental = False)
-    #testRecs = readData("./GeneratedDatasets/test.csv", experimental = False)
+    trainRecs = readData("./FinalData/train.csv", experimental = False)
+    testRecs = readData("./FinalData/test.csv", experimental = False)
     model = BiLMTextualEntailmentModel()
     tec = TextualEntailmentClassifier(model)
-    print("Training.")
+    tec.resetHead()
+    print("Training.", flush = True)
     tec.train(trainRecs)
-    print("Testing.")
-    res, loss = tec.test(validRecs)
-    validAcc = accuracy(res, [rec["entailment"] for rec in validRecs])
-    print("   Accuracy = %f." % validAcc)
+    print("Testing.", flush = True)
+    model.eval()
+    with torch.no_grad():
+        res, loss = tec.test(testRecs)
+    #testAcc = accuracy(res, [rec["entailment"] for rec in testRecs])
+    #print("   Baseline accuracy = %f." % testAcc, flush = True)
+    testAcc = accuracyByCategory(res, [rec["entailment"] for rec in testRecs], [rec["type"] for rec in testRecs])
+    print("   Baseline accuracy:\n%s" % testAcc, flush = True)
+    trainRecs = readData("./FinalData/train.csv", experimental = True)
+    testRecs = readData("./FinalData/test.csv", experimental = True)
+    print("Freezing LM and resetting head.", flush = True)
+    tec.freezeLM()
+    tec.resetHead()
+    print("Training.", flush = True)
+    tec.train(trainRecs)
+    print("Testing.", flush = True)
+    model.eval()
+    with torch.no_grad():
+        res, loss = tec.test(testRecs)
+    #testAcc = accuracy(res, [rec["entailment"] for rec in testRecs])
+    #print("   Experimental accuracy (no retrain) = %f." % testAcc, flush = True)
+    testAcc = accuracyByCategory(res, [rec["entailment"] for rec in testRecs], [rec["type"] for rec in testRecs])
+    print("   Experimental accuracy (no retrain):\n%s" % testAcc, flush = True)
+    trainRecs = readData("./FinalData/train.csv", experimental = True)
+    testRecs = readData("./FinalData/test.csv", experimental = True)
+    print("Unfreezing LM and resetting head.", flush = True)
+    tec.unfreezeLM()
+    tec.resetHead()
+    print("Training.", flush = True)
+    tec.train(trainRecs)
+    print("Testing.", flush = True)
+    model.eval()
+    with torch.no_grad():
+        res, loss = tec.test(testRecs)
+    #testAcc = accuracy(res, [rec["entailment"] for rec in testRecs])
+    #print("   Experimental accuracy (retrain) = %f." % testAcc, flush = True)
+    testAcc = accuracyByCategory(res, [rec["entailment"] for rec in testRecs], [rec["type"] for rec in testRecs])
+    print("   Experimental accuracy (retrain):\n%s" % testAcc, flush = True)
 
 
 
