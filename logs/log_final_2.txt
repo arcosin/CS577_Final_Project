@@ -1,0 +1,165 @@
+Training.
+   epoch 0.
+      Done. Loss = 3522.746973, Accuracy = 0.893775.
+   epoch 1.
+      Done. Loss = 1999.141818, Accuracy = 0.919365.
+   epoch 2.
+      Done. Loss = 940.816499, Accuracy = 0.968143.
+   epoch 3.
+      Done. Loss = 594.638444, Accuracy = 0.982661.
+   epoch 4.
+      Done. Loss = 482.020728, Accuracy = 0.986735.
+   epoch 5.
+      Done. Loss = 418.894501, Accuracy = 0.988302.
+   epoch 6.
+      Done. Loss = 371.436628, Accuracy = 0.989346.
+   epoch 7.
+      Done. Loss = 331.546935, Accuracy = 0.990600.
+   epoch 8.
+      Done. Loss = 297.311937, Accuracy = 0.991435.
+   epoch 9.
+      Done. Loss = 268.232394, Accuracy = 0.991853.
+   epoch 10.
+      Done. Loss = 243.872029, Accuracy = 0.992689.
+   epoch 11.
+      Done. Loss = 225.173517, Accuracy = 0.993106.
+   epoch 12.
+      Done. Loss = 211.212051, Accuracy = 0.993733.
+   epoch 13.
+      Done. Loss = 199.042121, Accuracy = 0.994151.
+   epoch 14.
+      Done. Loss = 188.707360, Accuracy = 0.994151.
+   epoch 15.
+      Done. Loss = 179.913922, Accuracy = 0.994569.
+   epoch 16.
+      Done. Loss = 170.785784, Accuracy = 0.994673.
+   epoch 17.
+      Done. Loss = 161.560630, Accuracy = 0.994778.
+   epoch 18.
+      Done. Loss = 152.925745, Accuracy = 0.994882.
+   epoch 19.
+      Done. Loss = 145.869624, Accuracy = 0.994882.
+   epoch 20.
+      Done. Loss = 139.730922, Accuracy = 0.995091.
+   epoch 21.
+      Done. Loss = 134.885348, Accuracy = 0.995091.
+   epoch 22.
+      Done. Loss = 129.968337, Accuracy = 0.995195.
+   epoch 23.
+      Done. Loss = 126.096970, Accuracy = 0.995613.
+   epoch 24.
+      Done. Loss = 122.660636, Accuracy = 0.995613.
+Testing.
+   Baseline accuracy:
+{'all': 0.7436708860759493, 'baseline': 0.7436708860759493, 'non-entailment': 0.5083459787556904, 'baseline_non-entailment': 0.5083459787556904, 'entailment': 1.0, 'baseline_entailment': 1.0}
+Freezing LM and resetting head.
+Training.
+   epoch 0.
+      Done. Loss = 37785.554606, Accuracy = 0.782214.
+   epoch 1.
+      Done. Loss = 35714.268759, Accuracy = 0.810448.
+   epoch 2.
+      Done. Loss = 32346.523085, Accuracy = 0.834092.
+   epoch 3.
+      Done. Loss = 29703.348930, Accuracy = 0.852878.
+   epoch 4.
+      Done. Loss = 28086.027361, Accuracy = 0.864017.
+   epoch 5.
+      Done. Loss = 26843.568052, Accuracy = 0.871070.
+   epoch 6.
+      Done. Loss = 25841.186192, Accuracy = 0.876703.
+   epoch 7.
+      Done. Loss = 24987.272612, Accuracy = 0.882083.
+   epoch 8.
+      Done. Loss = 24216.011273, Accuracy = 0.886600.
+   epoch 9.
+      Done. Loss = 23510.451308, Accuracy = 0.890522.
+   epoch 10.
+      Done. Loss = 22833.100659, Accuracy = 0.894103.
+   epoch 11.
+      Done. Loss = 22227.577121, Accuracy = 0.897450.
+   epoch 12.
+      Done. Loss = 21668.293160, Accuracy = 0.900257.
+   epoch 13.
+      Done. Loss = 21164.421329, Accuracy = 0.902920.
+   epoch 14.
+      Done. Loss = 20725.084029, Accuracy = 0.905530.
+   epoch 15.
+      Done. Loss = 20321.591814, Accuracy = 0.907689.
+   epoch 16.
+      Done. Loss = 19942.594109, Accuracy = 0.909614.
+   epoch 17.
+      Done. Loss = 19595.430486, Accuracy = 0.911054.
+   epoch 18.
+      Done. Loss = 19297.071105, Accuracy = 0.912260.
+   epoch 19.
+      Done. Loss = 19019.928608, Accuracy = 0.913753.
+   epoch 20.
+      Done. Loss = 18750.390167, Accuracy = 0.915355.
+   epoch 21.
+      Done. Loss = 18529.592822, Accuracy = 0.916902.
+   epoch 22.
+      Done. Loss = 18318.619106, Accuracy = 0.917982.
+   epoch 23.
+      Done. Loss = 18119.736122, Accuracy = 0.918809.
+   epoch 24.
+      Done. Loss = 17935.451137, Accuracy = 0.919727.
+Testing.
+   Experimental accuracy (no retrain):
+{'all': 0.5011093033574915, 'htemporal': 0.4994979919678715, 'non-entailment': 0.9988197108291531, 'htemporal_non-entailment': 1.0, 'entailment': 0.0008896797153024911, 'htemporal_entailment': 0.0, 'hypernym': 0.5050685748360167, 'hypernym_entailment': 0.0012033694344163659, 'locational': 0.5004314063848145, 'locational_entailment': 0.0, 'composition': 0.4986999479979199, 'composition_non-entailment': 0.9958376690946931, 'hypernym_non-entailment': 1.0, 'composition_entailment': 0.002079002079002079, 'temporal': 0.7, 'temporal_non-entailment': 1.0, 'locational_non-entailment': 1.0, 'temporal_entailment': 0.0}
+Unfreezing LM and resetting head.
+Training.
+   epoch 0.
+      Done. Loss = 8659.198209, Accuracy = 0.958919.
+   epoch 1.
+      Done. Loss = 4968.617684, Accuracy = 0.966009.
+   epoch 2.
+      Done. Loss = 2395.173856, Accuracy = 0.989365.
+   epoch 3.
+      Done. Loss = 1859.473210, Accuracy = 0.993936.
+   epoch 4.
+      Done. Loss = 1640.424828, Accuracy = 0.995088.
+   epoch 5.
+      Done. Loss = 1557.903904, Accuracy = 0.995429.
+   epoch 6.
+      Done. Loss = 1440.880556, Accuracy = 0.996059.
+   epoch 7.
+      Done. Loss = 1349.757679, Accuracy = 0.996293.
+   epoch 8.
+      Done. Loss = 1249.917787, Accuracy = 0.996509.
+   epoch 9.
+      Done. Loss = 1157.852317, Accuracy = 0.996635.
+   epoch 10.
+      Done. Loss = 1078.141365, Accuracy = 0.996815.
+   epoch 11.
+      Done. Loss = 1005.502068, Accuracy = 0.996923.
+   epoch 12.
+      Done. Loss = 938.989279, Accuracy = 0.997121.
+   epoch 13.
+      Done. Loss = 880.773443, Accuracy = 0.997193.
+   epoch 14.
+      Done. Loss = 833.776214, Accuracy = 0.997355.
+   epoch 15.
+      Done. Loss = 793.767920, Accuracy = 0.997463.
+   epoch 16.
+      Done. Loss = 756.833479, Accuracy = 0.997571.
+   epoch 17.
+      Done. Loss = 721.253252, Accuracy = 0.997679.
+   epoch 18.
+      Done. Loss = 689.221358, Accuracy = 0.997715.
+   epoch 19.
+      Done. Loss = 668.007720, Accuracy = 0.997697.
+   epoch 20.
+      Done. Loss = 652.472640, Accuracy = 0.997751.
+   epoch 21.
+      Done. Loss = 640.580993, Accuracy = 0.997805.
+   epoch 22.
+      Done. Loss = 636.360253, Accuracy = 0.997859.
+   epoch 23.
+      Done. Loss = 637.107201, Accuracy = 0.997805.
+   epoch 24.
+      Done. Loss = 634.885412, Accuracy = 0.997787.
+Testing.
+   Experimental accuracy (retrain):
+{'all': 0.5173790859340335, 'htemporal': 0.5030120481927711, 'non-entailment': 0.3824136913543818, 'htemporal_non-entailment': 0.005025125628140704, 'entailment': 0.6530249110320284, 'htemporal_entailment': 1.0, 'hypernym': 0.5480023852116875, 'hypernym_entailment': 0.4536702767749699, 'locational': 0.5168248490077653, 'locational_entailment': 0.037996545768566495, 'composition': 0.5033801352054083, 'composition_non-entailment': 0.1716961498439126, 'hypernym_non-entailment': 0.640661938534279, 'composition_entailment': 0.8347193347193347, 'temporal': 1.0, 'temporal_non-entailment': 1.0, 'locational_non-entailment': 0.9948275862068966, 'temporal_entailment': 1.0}
+Done. Runtime = 65521.446999.

@@ -133,7 +133,7 @@ class TextualEntailmentClassifier:
         self.opt = optim.Adam(self.model.parameters(), lr = lr)
         self.bceLoss = nn.BCELoss()
 
-    def train(self, trainDS, epochs = 30):
+    def train(self, trainDS, epochs = 35):
         losses = []
         for e in range(epochs):
             print("   epoch %d." % e)

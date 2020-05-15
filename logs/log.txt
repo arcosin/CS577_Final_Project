@@ -1,0 +1,192 @@
+Training.
+   epoch 0.
+      Done. Loss = 4319.846071, Accuracy = 0.932165.
+   epoch 1.
+      Done. Loss = 2571.457225, Accuracy = 0.943700.
+   epoch 2.
+      Done. Loss = 1116.466181, Accuracy = 0.979737.
+   epoch 3.
+      Done. Loss = 582.990049, Accuracy = 0.988840.
+   epoch 4.
+      Done. Loss = 407.081232, Accuracy = 0.992518.
+   epoch 5.
+      Done. Loss = 345.131356, Accuracy = 0.993952.
+   epoch 6.
+      Done. Loss = 309.969159, Accuracy = 0.994451.
+   epoch 7.
+      Done. Loss = 283.353898, Accuracy = 0.994763.
+   epoch 8.
+      Done. Loss = 261.383379, Accuracy = 0.995012.
+   epoch 9.
+      Done. Loss = 243.870630, Accuracy = 0.995262.
+   epoch 10.
+      Done. Loss = 228.792996, Accuracy = 0.995449.
+   epoch 11.
+      Done. Loss = 214.697658, Accuracy = 0.995760.
+   epoch 12.
+      Done. Loss = 201.586057, Accuracy = 0.995947.
+   epoch 13.
+      Done. Loss = 186.731409, Accuracy = 0.996259.
+   epoch 14.
+      Done. Loss = 174.126215, Accuracy = 0.996259.
+   epoch 15.
+      Done. Loss = 162.627379, Accuracy = 0.996384.
+   epoch 16.
+      Done. Loss = 152.546471, Accuracy = 0.996758.
+   epoch 17.
+      Done. Loss = 143.087335, Accuracy = 0.996820.
+   epoch 18.
+      Done. Loss = 137.226465, Accuracy = 0.996820.
+   epoch 19.
+      Done. Loss = 129.249634, Accuracy = 0.996883.
+   epoch 20.
+      Done. Loss = 123.369950, Accuracy = 0.996883.
+   epoch 21.
+      Done. Loss = 121.067725, Accuracy = 0.996883.
+   epoch 22.
+      Done. Loss = 114.844289, Accuracy = 0.996883.
+   epoch 23.
+      Done. Loss = 109.003127, Accuracy = 0.997007.
+   epoch 24.
+      Done. Loss = 103.649170, Accuracy = 0.997132.
+   epoch 25.
+      Done. Loss = 99.696917, Accuracy = 0.997194.
+   epoch 26.
+      Done. Loss = 97.107798, Accuracy = 0.997194.
+   epoch 27.
+      Done. Loss = 94.929668, Accuracy = 0.997257.
+   epoch 28.
+      Done. Loss = 94.016827, Accuracy = 0.997132.
+   epoch 29.
+      Done. Loss = 91.877047, Accuracy = 0.997132.
+Testing.
+   Baseline accuracy = 0.707853.
+Freezing LM and resetting head.
+Training.
+   epoch 0.
+      Done. Loss = 34892.164409, Accuracy = 0.731345.
+   epoch 1.
+      Done. Loss = 29527.546285, Accuracy = 0.802235.
+   epoch 2.
+      Done. Loss = 26645.256689, Accuracy = 0.830296.
+   epoch 3.
+      Done. Loss = 24744.438618, Accuracy = 0.848027.
+   epoch 4.
+      Done. Loss = 23326.314045, Accuracy = 0.860568.
+   epoch 5.
+      Done. Loss = 22204.559561, Accuracy = 0.870592.
+   epoch 6.
+      Done. Loss = 21270.491733, Accuracy = 0.878268.
+   epoch 7.
+      Done. Loss = 20459.895790, Accuracy = 0.884700.
+   epoch 8.
+      Done. Loss = 19770.068125, Accuracy = 0.889796.
+   epoch 9.
+      Done. Loss = 19208.831285, Accuracy = 0.894386.
+   epoch 10.
+      Done. Loss = 18736.962960, Accuracy = 0.898270.
+   epoch 11.
+      Done. Loss = 18330.403309, Accuracy = 0.901432.
+   epoch 12.
+      Done. Loss = 17971.826801, Accuracy = 0.904103.
+   epoch 13.
+      Done. Loss = 17650.361849, Accuracy = 0.906375.
+   epoch 14.
+      Done. Loss = 17367.251924, Accuracy = 0.908171.
+   epoch 15.
+      Done. Loss = 17109.135871, Accuracy = 0.909844.
+   epoch 16.
+      Done. Loss = 16873.954469, Accuracy = 0.911518.
+   epoch 17.
+      Done. Loss = 16661.056990, Accuracy = 0.913237.
+   epoch 18.
+      Done. Loss = 16466.074890, Accuracy = 0.914542.
+   epoch 19.
+      Done. Loss = 16289.360679, Accuracy = 0.915755.
+   epoch 20.
+      Done. Loss = 16128.369473, Accuracy = 0.916998.
+   epoch 21.
+      Done. Loss = 15977.844059, Accuracy = 0.918195.
+   epoch 22.
+      Done. Loss = 15839.067412, Accuracy = 0.919193.
+   epoch 23.
+      Done. Loss = 15710.632312, Accuracy = 0.920068.
+   epoch 24.
+      Done. Loss = 15590.900061, Accuracy = 0.920959.
+   epoch 25.
+      Done. Loss = 15481.472370, Accuracy = 0.921711.
+   epoch 26.
+      Done. Loss = 15379.686060, Accuracy = 0.922478.
+   epoch 27.
+      Done. Loss = 15286.083218, Accuracy = 0.923000.
+   epoch 28.
+      Done. Loss = 15196.248404, Accuracy = 0.923415.
+   epoch 29.
+      Done. Loss = 15111.761739, Accuracy = 0.923998.
+Testing.
+   Experimental accuracy (no retrain) = 0.500568.
+Unfreezing LM and resetting head.
+Training.
+   epoch 0.
+      Done. Loss = 9500.447519, Accuracy = 0.953610.
+   epoch 1.
+      Done. Loss = 3692.736000, Accuracy = 0.986476.
+   epoch 2.
+      Done. Loss = 2463.967538, Accuracy = 0.989884.
+   epoch 3.
+      Done. Loss = 2283.127784, Accuracy = 0.992447.
+   epoch 4.
+      Done. Loss = 1735.121235, Accuracy = 0.994075.
+   epoch 5.
+      Done. Loss = 2094.929640, Accuracy = 0.993906.
+   epoch 6.
+      Done. Loss = 1415.418535, Accuracy = 0.995149.
+   epoch 7.
+      Done. Loss = 1410.093976, Accuracy = 0.995763.
+   epoch 8.
+      Done. Loss = 1435.006981, Accuracy = 0.995272.
+   epoch 9.
+      Done. Loss = 1291.702307, Accuracy = 0.995840.
+   epoch 10.
+      Done. Loss = 1416.939234, Accuracy = 0.995594.
+   epoch 11.
+      Done. Loss = 1442.649456, Accuracy = 0.995487.
+   epoch 12.
+      Done. Loss = 1273.143025, Accuracy = 0.995963.
+   epoch 13.
+      Done. Loss = 1455.664949, Accuracy = 0.995548.
+   epoch 14.
+      Done. Loss = 1561.703766, Accuracy = 0.994765.
+   epoch 15.
+      Done. Loss = 1707.778646, Accuracy = 0.994412.
+   epoch 16.
+      Done. Loss = 1833.844779, Accuracy = 0.994320.
+   epoch 17.
+      Done. Loss = 1352.077854, Accuracy = 0.995333.
+   epoch 18.
+      Done. Loss = 1650.125970, Accuracy = 0.994811.
+   epoch 19.
+      Done. Loss = 1285.546678, Accuracy = 0.995671.
+   epoch 20.
+      Done. Loss = 1330.017893, Accuracy = 0.995794.
+   epoch 21.
+      Done. Loss = 1302.669265, Accuracy = 0.995917.
+   epoch 22.
+      Done. Loss = 1296.513915, Accuracy = 0.996101.
+   epoch 23.
+      Done. Loss = 1263.477874, Accuracy = 0.996285.
+   epoch 24.
+      Done. Loss = 1222.329832, Accuracy = 0.996346.
+   epoch 25.
+      Done. Loss = 1188.381931, Accuracy = 0.996393.
+   epoch 26.
+      Done. Loss = 1152.518695, Accuracy = 0.996393.
+   epoch 27.
+      Done. Loss = 1100.660842, Accuracy = 0.996561.
+   epoch 28.
+      Done. Loss = 1050.798104, Accuracy = 0.996700.
+   epoch 29.
+      Done. Loss = 1008.660239, Accuracy = 0.996792.
+Testing.
+   Experimental accuracy (retrain) = 0.641821.
+Done. Runtime = 54012.297858.

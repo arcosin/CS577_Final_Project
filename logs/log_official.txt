@@ -1,0 +1,255 @@
+Training.
+   epoch 0.
+      Done. Loss = 4319.846071, Accuracy = 0.932165.
+   epoch 1.
+      Done. Loss = 2571.457225, Accuracy = 0.943700.
+   epoch 2.
+      Done. Loss = 1116.466181, Accuracy = 0.979737.
+   epoch 3.
+      Done. Loss = 582.990049, Accuracy = 0.988840.
+   epoch 4.
+      Done. Loss = 407.081232, Accuracy = 0.992518.
+   epoch 5.
+      Done. Loss = 345.131356, Accuracy = 0.993952.
+   epoch 6.
+      Done. Loss = 309.969159, Accuracy = 0.994451.
+   epoch 7.
+      Done. Loss = 283.353898, Accuracy = 0.994763.
+   epoch 8.
+      Done. Loss = 261.383379, Accuracy = 0.995012.
+   epoch 9.
+      Done. Loss = 243.870630, Accuracy = 0.995262.
+   epoch 10.
+      Done. Loss = 228.792996, Accuracy = 0.995449.
+   epoch 11.
+      Done. Loss = 214.697658, Accuracy = 0.995760.
+   epoch 12.
+      Done. Loss = 201.586057, Accuracy = 0.995947.
+   epoch 13.
+      Done. Loss = 186.731409, Accuracy = 0.996259.
+   epoch 14.
+      Done. Loss = 174.126215, Accuracy = 0.996259.
+   epoch 15.
+      Done. Loss = 162.627379, Accuracy = 0.996384.
+   epoch 16.
+      Done. Loss = 152.546471, Accuracy = 0.996758.
+   epoch 17.
+      Done. Loss = 143.087335, Accuracy = 0.996820.
+   epoch 18.
+      Done. Loss = 137.226465, Accuracy = 0.996820.
+   epoch 19.
+      Done. Loss = 129.249634, Accuracy = 0.996883.
+   epoch 20.
+      Done. Loss = 123.369950, Accuracy = 0.996883.
+   epoch 21.
+      Done. Loss = 121.067725, Accuracy = 0.996883.
+   epoch 22.
+      Done. Loss = 114.844289, Accuracy = 0.996883.
+   epoch 23.
+      Done. Loss = 109.003127, Accuracy = 0.997007.
+   epoch 24.
+      Done. Loss = 103.649170, Accuracy = 0.997132.
+   epoch 25.
+      Done. Loss = 99.696917, Accuracy = 0.997194.
+   epoch 26.
+      Done. Loss = 97.107798, Accuracy = 0.997194.
+   epoch 27.
+      Done. Loss = 94.929668, Accuracy = 0.997257.
+   epoch 28.
+      Done. Loss = 94.016827, Accuracy = 0.997132.
+   epoch 29.
+      Done. Loss = 91.877047, Accuracy = 0.997132.
+   epoch 30.
+      Done. Loss = 90.463753, Accuracy = 0.997132.
+   epoch 31.
+      Done. Loss = 89.424372, Accuracy = 0.997194.
+   epoch 32.
+      Done. Loss = 88.599013, Accuracy = 0.997194.
+   epoch 33.
+      Done. Loss = 88.917305, Accuracy = 0.997194.
+   epoch 34.
+      Done. Loss = 86.645126, Accuracy = 0.997132.
+   epoch 35.
+      Done. Loss = 85.684305, Accuracy = 0.997070.
+   epoch 36.
+      Done. Loss = 85.366574, Accuracy = 0.997194.
+   epoch 37.
+      Done. Loss = 85.511170, Accuracy = 0.997257.
+   epoch 38.
+      Done. Loss = 85.498018, Accuracy = 0.997132.
+   epoch 39.
+      Done. Loss = 86.103788, Accuracy = 0.997132.
+Testing.
+   Baseline accuracy:
+{'all': 0.7146596858638743, 'baseline': 0.7146596858638743, 'entailment': 0.4281217208814271, 'baseline_entailment': 0.4281217208814271, 'non-entailment': 1.0, 'baseline_non-entailment': 1.0}
+Freezing LM and resetting head.
+Training.
+   epoch 0.
+      Done. Loss = 35800.845787, Accuracy = 0.725466.
+   epoch 1.
+      Done. Loss = 30396.735193, Accuracy = 0.797476.
+   epoch 2.
+      Done. Loss = 27284.972792, Accuracy = 0.826428.
+   epoch 3.
+      Done. Loss = 25317.788048, Accuracy = 0.843821.
+   epoch 4.
+      Done. Loss = 23806.644581, Accuracy = 0.856239.
+   epoch 5.
+      Done. Loss = 22366.128014, Accuracy = 0.867799.
+   epoch 6.
+      Done. Loss = 21240.007772, Accuracy = 0.876717.
+   epoch 7.
+      Done. Loss = 20482.396354, Accuracy = 0.882366.
+   epoch 8.
+      Done. Loss = 19863.332787, Accuracy = 0.887187.
+   epoch 9.
+      Done. Loss = 19335.005626, Accuracy = 0.891132.
+   epoch 10.
+      Done. Loss = 18872.286753, Accuracy = 0.894355.
+   epoch 11.
+      Done. Loss = 18461.147763, Accuracy = 0.897165.
+   epoch 12.
+      Done. Loss = 18099.740081, Accuracy = 0.899544.
+   epoch 13.
+      Done. Loss = 17775.165287, Accuracy = 0.902184.
+   epoch 14.
+      Done. Loss = 17478.702672, Accuracy = 0.904211.
+   epoch 15.
+      Done. Loss = 17204.916496, Accuracy = 0.906406.
+   epoch 16.
+      Done. Loss = 16945.540329, Accuracy = 0.908202.
+   epoch 17.
+      Done. Loss = 16688.498915, Accuracy = 0.910059.
+   epoch 18.
+      Done. Loss = 16473.004044, Accuracy = 0.911763.
+   epoch 19.
+      Done. Loss = 16285.776589, Accuracy = 0.912945.
+   epoch 20.
+      Done. Loss = 16114.467779, Accuracy = 0.913943.
+   epoch 21.
+      Done. Loss = 15962.766930, Accuracy = 0.915094.
+   epoch 22.
+      Done. Loss = 15821.788744, Accuracy = 0.915954.
+   epoch 23.
+      Done. Loss = 15689.798794, Accuracy = 0.917121.
+   epoch 24.
+      Done. Loss = 15567.251346, Accuracy = 0.918211.
+   epoch 25.
+      Done. Loss = 15453.728711, Accuracy = 0.918963.
+   epoch 26.
+      Done. Loss = 15346.694660, Accuracy = 0.919669.
+   epoch 27.
+      Done. Loss = 15247.502664, Accuracy = 0.920268.
+   epoch 28.
+      Done. Loss = 15156.022220, Accuracy = 0.921035.
+   epoch 29.
+      Done. Loss = 15069.840028, Accuracy = 0.921634.
+   epoch 30.
+      Done. Loss = 14991.308692, Accuracy = 0.922294.
+   epoch 31.
+      Done. Loss = 14916.999379, Accuracy = 0.923000.
+   epoch 32.
+      Done. Loss = 14846.937744, Accuracy = 0.923584.
+   epoch 33.
+      Done. Loss = 14781.329544, Accuracy = 0.924090.
+   epoch 34.
+      Done. Loss = 14720.760274, Accuracy = 0.924566.
+   epoch 35.
+      Done. Loss = 14663.652091, Accuracy = 0.925195.
+   epoch 36.
+      Done. Loss = 14611.719878, Accuracy = 0.925610.
+   epoch 37.
+      Done. Loss = 14562.756528, Accuracy = 0.926070.
+   epoch 38.
+      Done. Loss = 14516.297437, Accuracy = 0.926562.
+   epoch 39.
+      Done. Loss = 14474.354121, Accuracy = 0.926899.
+Testing.
+   Experimental accuracy (no retrain):
+{'all': 0.5001891789632993, 'composition': 0.49949031600407745, 'entailment': 0.0002523977788995457, 'composition_entailment': 0.0, 'non-entailment': 0.9994958406856567, 'composition_non-entailment': 0.9989806320081549, 'geographic': 0.5051546391752577, 'geographic_entailment': 0.0017331022530329288, 'geographic_non-entailment': 1.0, 'htemporal': 0.5007541478129713, 'htemporal_entailment': 0.0, 'htemporal_non-entailment': 1.0, 'hypernym': 0.4919653893695921, 'hypernym_entailment': 0.0, 'hypernym_non-entailment': 0.998745294855709, 'locational': 0.5058724832214765, 'locational_entailment': 0.0, 'locational_non-entailment': 1.0, 'temporal': 0.75, 'temporal_entailment': 0.0, 'temporal_non-entailment': 1.0}
+Unfreezing LM and resetting head.
+Training.
+   epoch 0.
+      Done. Loss = 7296.379079, Accuracy = 0.966029.
+   epoch 1.
+      Done. Loss = 3573.605382, Accuracy = 0.987934.
+   epoch 2.
+      Done. Loss = 1418.063127, Accuracy = 0.995149.
+   epoch 3.
+      Done. Loss = 1299.237529, Accuracy = 0.995809.
+   epoch 4.
+      Done. Loss = 1405.280935, Accuracy = 0.995548.
+   epoch 5.
+      Done. Loss = 3198.763496, Accuracy = 0.989884.
+   epoch 6.
+      Done. Loss = 1776.521292, Accuracy = 0.994136.
+   epoch 7.
+      Done. Loss = 1495.141787, Accuracy = 0.995072.
+   epoch 8.
+      Done. Loss = 2060.623061, Accuracy = 0.993967.
+   epoch 9.
+      Done. Loss = 1280.265973, Accuracy = 0.996300.
+   epoch 10.
+      Done. Loss = 1051.962918, Accuracy = 0.996684.
+   epoch 11.
+      Done. Loss = 983.600260, Accuracy = 0.996592.
+   epoch 12.
+      Done. Loss = 1586.201336, Accuracy = 0.995226.
+   epoch 13.
+      Done. Loss = 1218.012695, Accuracy = 0.995978.
+   epoch 14.
+      Done. Loss = 1443.044627, Accuracy = 0.995871.
+   epoch 15.
+      Done. Loss = 1510.777825, Accuracy = 0.995686.
+   epoch 16.
+      Done. Loss = 1283.112586, Accuracy = 0.996239.
+   epoch 17.
+      Done. Loss = 1287.843057, Accuracy = 0.996254.
+   epoch 18.
+      Done. Loss = 1422.735960, Accuracy = 0.996009.
+   epoch 19.
+      Done. Loss = 1323.790203, Accuracy = 0.996239.
+   epoch 20.
+      Done. Loss = 1092.561615, Accuracy = 0.996669.
+   epoch 21.
+      Done. Loss = 1004.571631, Accuracy = 0.996838.
+   epoch 22.
+      Done. Loss = 1007.670024, Accuracy = 0.996930.
+   epoch 23.
+      Done. Loss = 1039.564066, Accuracy = 0.996884.
+   epoch 24.
+      Done. Loss = 978.644582, Accuracy = 0.997022.
+   epoch 25.
+      Done. Loss = 947.459304, Accuracy = 0.997160.
+   epoch 26.
+      Done. Loss = 958.460793, Accuracy = 0.997068.
+   epoch 27.
+      Done. Loss = 1051.175685, Accuracy = 0.996853.
+   epoch 28.
+      Done. Loss = 1007.009279, Accuracy = 0.997053.
+   epoch 29.
+      Done. Loss = 957.704028, Accuracy = 0.997237.
+   epoch 30.
+      Done. Loss = 924.733699, Accuracy = 0.997283.
+   epoch 31.
+      Done. Loss = 907.105917, Accuracy = 0.997206.
+   epoch 32.
+      Done. Loss = 896.619564, Accuracy = 0.997191.
+   epoch 33.
+      Done. Loss = 898.728804, Accuracy = 0.997114.
+   epoch 34.
+      Done. Loss = 904.523360, Accuracy = 0.997175.
+   epoch 35.
+      Done. Loss = 906.315787, Accuracy = 0.997068.
+   epoch 36.
+      Done. Loss = 902.558775, Accuracy = 0.997083.
+   epoch 37.
+      Done. Loss = 891.902790, Accuracy = 0.997099.
+   epoch 38.
+      Done. Loss = 872.796588, Accuracy = 0.997068.
+   epoch 39.
+      Done. Loss = 849.400021, Accuracy = 0.997221.
+Testing.
+   Experimental accuracy (retrain):
+{'all': 0.6385420607895069, 'composition': 0.5, 'entailment': 0.2766279656739021, 'composition_entailment': 0.0, 'non-entailment': 1.0, 'composition_non-entailment': 1.0, 'geographic': 0.9553264604810997, 'geographic_entailment': 0.9098786828422877, 'geographic_non-entailment': 1.0, 'htemporal': 0.5173453996983409, 'htemporal_entailment': 0.03323262839879154, 'htemporal_non-entailment': 1.0, 'hypernym': 0.4956736711990111, 'hypernym_entailment': 0.0060901339829476245, 'hypernym_non-entailment': 1.0, 'locational': 0.9521812080536913, 'locational_entailment': 0.9032258064516129, 'locational_non-entailment': 1.0, 'temporal': 1.0, 'temporal_entailment': 1.0, 'temporal_non-entailment': 1.0}
+Done. Runtime = 75143.295009.
